@@ -1,0 +1,2 @@
+# AVisualizedUrbanGreenbeltAutomaticIrrigationSystemBasedOnBigDataAndInternetOfThings
+基于大数据和物联网的可视化城市绿化带自动灌溉系统
