@@ -36,14 +36,16 @@ void setup()
   lcd.begin (16,2); // for 16 x 2 LCD module 
   lcd.setBacklightPin(3,POSITIVE); 
   lcd.setBacklight(HIGH); 
+  //这个引脚就是我们读取土壤湿度传感器的I2C信息桥
   pinMode(analogPin,INPUT);
+
   pinMode(WaterPumpPin,OUTPUT);
   digitalWrite(WaterPumpPin,LOW);
   Serial.begin(9600);
 } 
 
 void loop() {
-    float data=analogRead(analogPin);
+    float data=analogRead(analogPin);  //这个引脚会获得经过土壤湿度传感器之后的电位 这个电位会随着土壤湿度而变化
       Serial.println(data);
     i=data/1023;
     j=(1-i)*100;
