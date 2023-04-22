@@ -6,7 +6,7 @@
 
    开发环境：Idea2020，Maven3.6，Java1.8，Nacos1.4.1，Golang1.20，Git
 
-   Java应用技术：Spring Boot2.7.11，Spring Cloud Alibaba，Nacos
+   Java应用技术：Spring Boot2.7.11，Spring Cloud Alibaba，Nacos，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)
 
    Go使用技术：Gin，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
 
@@ -36,7 +36,7 @@
 
    环境：MySql，Redis
 
-   说明：MySql作为长期静态数据数据库，Redis作为缓存数据库用于更新集群中各个设备状态
+   说明：MySql作为长期静态数据数据库，Redis作为缓存数据库用于更新物联网设备集群中各个设备状态
 
 5. #### 其他说明
 
