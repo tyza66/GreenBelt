@@ -1,6 +1,6 @@
 普通面包板
 杜邦线
-esp8266开发板 NodeMcu LuaWifi TXQGL 
+esp8266开发板 NodeMcu LuaWifi CH340 TXQGL 
 土壤湿度传感器  掌卓
 DS18B20 TO-92测温模块 RLSTM
 光敏电阻传感器模块 达科峰
