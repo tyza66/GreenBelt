@@ -31,6 +31,10 @@
 
    环境：ESP8266开发板，ArduinoIDE，嘉立创EDA专业版
 
+   使用库：ESP8266WiFi，ESP8266WiFiMulti，ESP8266WebServer，OneWire，DallasTemperature，stdio
+
+   项目中对应文件夹：成果\集群物联网设备固件及图片\sketch_apr27a
+
    应用技术：C语言，模块图纸及相关文档，常用硬件开发库
 
 4. #### 数据库部分
