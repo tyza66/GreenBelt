@@ -39,7 +39,7 @@
 
 4. #### 数据库部分
 
-   环境：MySql，Redis，RedisInsight-v2
+   环境：MySql，Redis，Navicate，RedisInsight-v2
 
    说明：MySql作为长期静态数据数据库，Redis作为缓存数据库用于更新物联网设备集群中各个设备状态
 
