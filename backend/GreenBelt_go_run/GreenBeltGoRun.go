@@ -39,10 +39,10 @@ func main() {
 	)
 	//定义用于同步关系型数据库中对象的结构体
 	type GBBars struct {
-		Id int64
+		Id      int64
 		Address string
-		Name string
-		Group int
+		Name    string
+		Group   int
 	}
 	//定义设备列表 最多20个设备
 	drivers := GBQueue{buff: make([]string, 20), maxsize: 20, front: -1, rear: -1}
@@ -57,7 +57,7 @@ func main() {
 		fmt.Println("同步表结构失败")
 	}
 	//读取数据库中的设备列表并将数据列表入队列
-	rows, err := engine.Rows(&GBBars{Group:1})
+	rows, err := engine.Rows(&GBBars{Group: 1})
 	userBean := new(GBBars)
 	for rows.Next() {
 		rows.Scan(userBean)
@@ -70,17 +70,17 @@ func main() {
 		fmt.Println(way)
 		//刷新缓存中的温度
 		wd := getMsg("http://" + way + "/wd")
-		if wd != "" {
+		if wd != "" && wd != "404" {
 			redigo.Do("Set", "Wendu_"+way, wd)
 		}
 		//刷新缓存中的湿度
 		sd := getMsg("http://" + way + "/sd")
-		if sd != "" {
+		if sd != "" && wd != "404" {
 			redigo.Do("Set", "Shidu_"+way, sd)
 		}
 		//刷新缓存中的是否有光照
 		ld := getMsg("http://" + way + "/ld")
-		if ld != "" {
+		if ld != "" && wd != "404" {
 			redigo.Do("Set", "Liangdu_"+way, ld)
 		}
 		context.JSON(http.StatusOK, gin.H{"statu": "OK", "Wendu": wd, "Shidu": sd, "Liangdu": ld}) //返回json数据
@@ -140,3 +140,5 @@ func (q *GBQueue) Pop() (n string, err error) {
 	q.front++
 	return n, nil
 }
+
+//
