@@ -2,26 +2,26 @@
 #include <ESP8266WiFiMulti.h>   //  ESP8266WiFiMulti库
 #include <ESP8266WebServer.h>   //  ESP8266WebServer库
 
-#include <OneWire.h> //onewrie库
+#include <OneWire.h> //Onewrie库
 #include <DallasTemperature.h> //温度模块快捷库
 
-#include <stdio.h>
+#include <stdio.h> //标准输入输出库
  
 ESP8266WiFiMulti wifiMulti;     // 建立ESP8266WiFiMulti对象,对象名称是 'wifiMulti'
  
 ESP8266WebServer esp8266_server(80);// 建立网络服务器对象，该对象用于响应HTTP请求。监听端口（80）
  
 OneWire oneWire(D2); //检查温度的引脚
-DallasTemperature sensors(&oneWire);
+DallasTemperature sensors(&oneWire); //oneWire库要用的变量
 void setup(void){
-  Serial.begin(9600);   // 启动串口通讯
-  sensors.begin();
+  Serial.begin(9600);   //启动串口通讯
+  sensors.begin();      //初始化读取温度
 
-  pinMode(A0,INPUT);
-  pinMode(D3, OUTPUT); 
-  pinMode(D1,INPUT);
+  pinMode(A0,INPUT); //模拟信号读取的引脚 用于接收土壤湿度的模拟信号
+  pinMode(D3,OUTPUT); //用于控制洒水机的继电器
+  pinMode(D1,INPUT);//用于检查是否存在光照
 
-  digitalWrite(D3,LOW);
+  digitalWrite(D3,LOW);//初始化洒水机默认关闭
   
   wifiMulti.addAP("FOREVER WIFI HUB 5 4G", "hellohello888"); // 将需要连接的一系列WiFi ID和密码输入这里
   Serial.println("Connecting ...");                            // 则尝试使用此处存储的密码进行连接。
@@ -55,11 +55,13 @@ void setup(void){
 void loop(void){
   esp8266_server.handleClient();                     // 检查http服务器访问
 }
- 
+
+//帮助页面
 void handleRoot() {       
   esp8266_server.send(200, "text/html", "<head><meta charset=\"UTF-8\"></head><body><font color=\"#d13810\">欢迎使用绿带绿化带管理系统物联网端:https://github.com/tyza66/GreenBelt</font><ul><li>指令wd:当前获得温度</li><li>指令sd:当前获得当前土壤湿度</li><li>指令ld:获得当前是否有光照条件</li><li>指令wo:启动洒水器</li><li>指令wc:关闭洒水器</li></ul></body>");
 }
- 
+
+//获取温度
 void getWenDu() {                          
   sensors.requestTemperatures(); // 发送命令获取温度
   Serial.println("Get WenDu Done");
@@ -69,6 +71,7 @@ void getWenDu() {
   esp8266_server.send(200, "text/plain", str); //返回温度的值
 }
 
+//获取湿度
 void getShiDu(){
   float data=analogRead(A0);
   float i=data/1023;
@@ -78,6 +81,7 @@ void getShiDu(){
   esp8266_server.send(200, "text/plain", str); //返回温度的值
 }
 
+//打开洒水机
 void waterOpen(){
   digitalWrite(D3,HIGH);
   esp8266_server.send(200, "text/plain", "OK");
