@@ -9,7 +9,7 @@
 
    Java应用技术：Spring Boot2.7.11，Spring Cloud Alibaba，Nacos，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)
 
-   Go使用技术：Gin，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
+   Go使用技术：Gin，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制，xorm，Redigo
 
    说明：采用[混合型分布式架构](#其他说明)，分布式集群中可包括多后端服务器(可使用不同编程语言实现业务逻辑)和多物联网硬件设备，后续可以拓展注册中心集群和各种微服务达到亿级访问量承载，以实现全国范围绿化带管理。演示项目中业务主控服务器由Spring Boot Web(java框架)框架支持，轮询各硬件设备状态由Gin(Go框架)服务支持
 
