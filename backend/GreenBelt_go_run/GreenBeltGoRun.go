@@ -72,8 +72,8 @@ func main() {
 	Qch := make(chan int)
 	//创建go程
 	go readAll(drivers, redigo, Qch)
-	//启动go程递归循环
-	Qch <- 1
+	//启动go程递归循环启动种子
+	Qch <- 96
 
 	//刷新缓存的任务接口 路径参数为带端口号的设备访问地址
 	ginServer.GET("/flush/:way", func(context *gin.Context) {
