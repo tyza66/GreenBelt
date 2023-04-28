@@ -5,13 +5,15 @@
 
 1. #### 后端部分
 
-   开发环境：Idea2020，Maven3.6，Java1.8，Nacos1.4.1，Golang1.20，Git
+   开发环境：Idea2020，Maven3.6，Java1.8，Nacos1.4.1，Goland2021，Golang1.20，Git
 
-   Java应用技术：Spring Boot2.7.11，Spring Cloud Alibaba，Nacos，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)
+   Java应用技术：Spring Boot2.7.11，Spring Cloud，Spring Cloud Alibaba，Nacos，Gateway，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)，Hutool
 
    Go使用技术：Gin，xorm，Redigo，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
 
    说明：采用[混合型分布式架构](#其他说明)，分布式集群中可包括多后端服务器(可使用不同编程语言实现业务逻辑)和多物联网硬件设备，后续可以拓展注册中心集群和各种微服务达到亿级访问量承载，以实现全国范围绿化带管理。演示项目中业务主控服务器由Spring Boot Web(java框架)框架支持，轮询各硬件设备状态由Gin(Go框架)服务支持
+
+   项目中对应文件夹：backend
 
 2. #### 前端部分
 
@@ -27,6 +29,8 @@
 
    说明：我们采用前后端分离的思想，并尽力消除跨域时出现的问题。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其中一次致力于网页端可视化的体验，另一侧致力于App和小程序的体验
 
+   项目中对应文件夹：frontend
+
 3. #### 硬件部分
 
    环境：ESP8266开发板，ArduinoIDE，嘉立创EDA专业版
@@ -35,7 +39,7 @@
 
    使用库：ESP8266WiFi，ESP8266WiFiMulti，ESP8266WebServer，OneWire，DallasTemperature，stdio
 
-   项目中对应文件夹：成果\集群物联网设备固件及图片\sketch_apr27a，esp8266\烧录程序
+   项目中对应文件夹：esp8266
 
 4. #### 数据库部分
 
@@ -43,9 +47,15 @@
 
    说明：MySql作为长期静态数据数据库，Redis作为缓存数据库用于更新物联网设备集群中各个设备状态
 
+   项目中对应文件夹：database
+
 5. #### 网关部分
 
    使用网关：Nginx，Gateway
+
+   说明：对于实时更新设备状态层集群使用nginx反向代理，对于后端接口以及数据库调度等使用注册到Nacos注册中心的Gateway服务网关代理
+
+   项目中对应文件夹：gateway
 
 6. #### 其他说明
 
