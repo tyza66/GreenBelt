@@ -24,7 +24,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	//验证账号
+	//验证redis账号
 	if _, err := redigo.Do("AUTH", "000415"); err != nil {
 		redigo.Close()
 	}
@@ -45,7 +45,7 @@ func main() {
 		Group int
 	}
 	//定义设备列表 最多20个设备
-	//drivers := GBQueue{buff: make([]string, 20), maxsize: 20, front: -1, rear: -1}
+	drivers := GBQueue{buff: make([]string, 20), maxsize: 20, front: -1, rear: -1}
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 	if err != nil {
@@ -56,11 +56,12 @@ func main() {
 	if err != nil {
 		fmt.Println("同步表结构失败")
 	}
+	//读取数据库中的设备列表并将数据列表入队列
 	rows, err := engine.Rows(&GBBars{Group:1})
 	userBean := new(GBBars)
 	for rows.Next() {
 		rows.Scan(userBean)
-		fmt.Println(userBean)
+		drivers.Push(userBean.Address)
 	}
 
 	//刷新缓存的任务接口 路径参数为带端口号的设备访问地址
