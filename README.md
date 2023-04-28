@@ -9,7 +9,7 @@
 
    Java应用技术：Spring Boot2.7.11，Spring Cloud Alibaba，Nacos，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)
 
-   Go使用技术：Gin，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制，xorm，Redigo
+   Go使用技术：Gin，xorm，Redigo，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
 
    说明：采用[混合型分布式架构](#其他说明)，分布式集群中可包括多后端服务器(可使用不同编程语言实现业务逻辑)和多物联网硬件设备，后续可以拓展注册中心集群和各种微服务达到亿级访问量承载，以实现全国范围绿化带管理。演示项目中业务主控服务器由Spring Boot Web(java框架)框架支持，轮询各硬件设备状态由Gin(Go框架)服务支持
 
@@ -31,15 +31,15 @@
 
    环境：ESP8266开发板，ArduinoIDE，嘉立创EDA专业版
 
+   应用技术：C语言，模块图纸及相关文档，常用硬件开发库
+
    使用库：ESP8266WiFi，ESP8266WiFiMulti，ESP8266WebServer，OneWire，DallasTemperature，stdio
 
    项目中对应文件夹：成果\集群物联网设备固件及图片\sketch_apr27a，esp8266\烧录程序
 
-   应用技术：C语言，模块图纸及相关文档，常用硬件开发库
-
 4. #### 数据库部分
 
-   环境：MySql，Redis
+   环境：MySql，Redis，RedisInsight-v2
 
    说明：MySql作为长期静态数据数据库，Redis作为缓存数据库用于更新物联网设备集群中各个设备状态
 
