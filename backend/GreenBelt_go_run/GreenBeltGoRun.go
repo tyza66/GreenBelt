@@ -7,6 +7,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"io/ioutil"
 	"net/http"
+	"time"
 	"xorm.io/xorm"
 )
 
@@ -44,8 +45,6 @@ func main() {
 		Name    string
 		Group   int
 	}
-	//定义设备列表 最多20个设备
-	drivers := GBQueue{buff: make([]string, 20), maxsize: 20, front: -1, rear: -1}
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 	if err != nil {
@@ -56,18 +55,30 @@ func main() {
 	if err != nil {
 		fmt.Println("同步表结构失败")
 	}
+	//读取数据库中的设备条数
+	counts, _ := engine.Count(&GBBars{Group: 1})
 	//读取数据库中的设备列表并将数据列表入队列
-	rows, err := engine.Rows(&GBBars{Group: 1})
+	rows, _ := engine.Rows(&GBBars{Group: 1})
+	//定义设备队列
+	drivers := GBQueue{buff: make([]string, counts), maxsize: int(counts), front: -1, rear: -1}
 	userBean := new(GBBars)
 	for rows.Next() {
 		rows.Scan(userBean)
-		drivers.Push(userBean.Address)
+		if userBean.Address != "" {
+			drivers.Push(userBean.Address)
+		}
 	}
+	//创建go程排队用的信道
+	Qch := make(chan int)
+	//创建go程
+	go readAll(drivers, redigo, Qch)
+	//启动go程递归循环
+	Qch <- 1
 
 	//刷新缓存的任务接口 路径参数为带端口号的设备访问地址
 	ginServer.GET("/flush/:way", func(context *gin.Context) {
 		way := context.Param("way")
-		fmt.Println(way)
+		//fmt.Println(way)
 		//刷新缓存中的温度
 		wd := getMsg("http://" + way + "/wd")
 		if wd != "" && wd != "404" {
@@ -141,4 +152,30 @@ func (q *GBQueue) Pop() (n string, err error) {
 	return n, nil
 }
 
-//
+// 采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
+//每两秒向缓存中更新当前设备传感的信息
+func readAll(q GBQueue, redigo redis.Conn, Qch chan int) {
+	var c = <-Qch
+	var one, _ = q.Pop()
+	if one != ""{
+		//fmt.Println(one)
+		wd := getMsg("http://" + one + "/wd")
+		if wd != "" && wd != "404" {
+			redigo.Do("Set", "Wendu_"+one, wd)
+		}
+		//刷新缓存中的湿度
+		sd := getMsg("http://" + one + "/sd")
+		if sd != "" && wd != "404" {
+			redigo.Do("Set", "Shidu_"+one, sd)
+		}
+		//刷新缓存中的是否有光照
+		ld := getMsg("http://" + one + "/ld")
+		if ld != "" && wd != "404" {
+			redigo.Do("Set", "Liangdu_"+one, ld)
+		}
+		time.Sleep(2000 * time.Millisecond)
+		q.Push(one)
+	}
+	go readAll(q, redigo, Qch)
+	Qch <- c
+}
