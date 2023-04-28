@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gomodule/redigo/redis"
 	"io/ioutil"
 	"net/http"
+	"xorm.io/xorm"
 )
 
 /**
@@ -25,6 +27,40 @@ func main() {
 	//验证账号
 	if _, err := redigo.Do("AUTH", "000415"); err != nil {
 		redigo.Close()
+	}
+	//定义数据库连接信息
+	var (
+		userName  string = "root"
+		password  string = "123456"
+		ipAddress string = "127.0.0.1"
+		port      int    = 3306
+		dbName    string = "GreenBelt"
+		charset   string = "utf8mb4"
+	)
+	//定义用于同步关系型数据库中对象的结构体
+	type GBBars struct {
+		Id int64
+		Address string
+		Name string
+		Group int
+	}
+	//定义设备列表 最多20个设备
+	//drivers := GBQueue{buff: make([]string, 20), maxsize: 20, front: -1, rear: -1}
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
+	engine, err := xorm.NewEngine("mysql", dataSourceName)
+	if err != nil {
+		fmt.Println("数据库连接失败")
+	}
+	//同步数据库中的表
+	err = engine.Sync(new(GBBars))
+	if err != nil {
+		fmt.Println("同步表结构失败")
+	}
+	rows, err := engine.Rows(&GBBars{Group:1})
+	userBean := new(GBBars)
+	for rows.Next() {
+		rows.Scan(userBean)
+		fmt.Println(userBean)
 	}
 
 	//刷新缓存的任务接口 路径参数为带端口号的设备访问地址
