@@ -1,0 +1,25 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: greenbelt-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: greenbelt_route
+          uri: lb://greenbelt-service
+          predicates:
+            - Path=/greenbelt/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
