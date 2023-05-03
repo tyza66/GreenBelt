@@ -23,15 +23,15 @@
 
    环境：Node，Vue2.0，HBuilderX，VS code
 
-   应用技术：Vue2.0，ElementuiPlus
+   Node前端应用技术：Vue2.0，ElementuiPlus，Vuex，Vrouter，Axios
 
-   网页部分：ElementuiPlus框架自带的响应式布局，会有Github Page和Gitee Page等演示界面
+   网页部分说明：ElementuiPlus框架自带的响应式布局，会有Github Page和Gitee Page等演示界面
 
-   App部分：使用Uniapp可打包Android应用，iOS应用(需要加入App开发者联盟)等，我们演示项目只打包Android应用作为演示
+   App部分说明：使用Uniapp可打包Android应用，iOS应用(需要加入App开发者联盟)等，我们演示项目只打包Android应用作为演示
 
-   小程序部分：由于我们使用Uniapp一站式开发，小程序随时可以打包，是否上线小程序还待考虑
+   小程序部分说明：由于我们使用Uniapp一站式开发，小程序随时可以打包，是否上线小程序还待考虑
 
-   说明：我们采用前后端分离的思想，并尽力消除跨域时出现的问题。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其中致力于网页端可视化的体验，另一侧致力于App和小程序的体验
+   说明：我们采用前后端分离的思想，并尽力消除跨域时出现的问题。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页端可视化的体验，另一致力于App和小程序的体验
 
    项目中对应文件夹：frontend
 
