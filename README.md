@@ -31,7 +31,7 @@
 
    环境：Node，Vue3.0，Vue2.0，HBuilderX，VS code，@vue/cli
 
-   Node前端应用技术：@vue/cliV，ue2.0，Elementui-Plus，Vuex，Vrouter，Axios，Echarts
+   Node前端应用技术：@vue/cliV，ue2.0，Elementui-Plus，Vuex，Vrouter，Axios，Echarts，uiverse.io
 
    网页部分说明：ElementuiPlus框架自带的响应式布局，会有Github Page和Gitee Page等演示界面
 
