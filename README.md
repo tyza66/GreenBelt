@@ -21,7 +21,7 @@
 
 3. #### 前端部分
 
-   环境：Node，Vue2.0，HBuilderX，VS code
+   环境：Node，Vue3.0，Vue2.0，HBuilderX，VS code
 
    Node前端应用技术：Vue2.0，ElementuiPlus，Vuex，Vrouter，Axios
 
