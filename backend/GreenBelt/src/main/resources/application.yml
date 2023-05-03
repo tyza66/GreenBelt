@@ -16,3 +16,8 @@ spring:
                 password: nacos
                 namespace: public
                 ephemeral: true
+    redis:
+        timeout: 5000
+        host: localhost
+        port: 6379
+        password: 000415

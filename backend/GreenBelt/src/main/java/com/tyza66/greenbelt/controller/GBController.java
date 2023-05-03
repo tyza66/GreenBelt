@@ -5,9 +5,11 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import redis.clients.jedis.Jedis;
 
 /**
  * Author: tyza66
@@ -20,10 +22,21 @@ public class GBController {
     @Autowired
     RestTemplate restTemplate;
 
-    @GetMapping("/flush")
-    public JSON flush(){
-        String jsonS = restTemplate.getForObject("http://localhost:96/flush/192.168.100.106:80",String.class);
+    @Autowired
+    Jedis jedis;
+
+    @GetMapping("/flush/{address}")
+    public JSON flush(@PathVariable String address) {
+        String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
         JSONObject entries = JSONUtil.parseObj(jsonS);
         return entries;
     }
+
+    @GetMapping("/getWendu/{address}")
+    public JSON getWendu(@PathVariable String address){
+        String s = jedis.get("Wendu_" + address);
+        JSONObject wendu = JSONUtil.createObj().set("Wendu", s);
+        return wendu;
+    }
 }
+

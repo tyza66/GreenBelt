@@ -9,7 +9,7 @@ spring:
         - id: greenbelt_route
           uri: lb://greenbelt-service
           predicates:
-            - Path=/greenbelt/**
+            - Path=/**
       globalcors:
         cors-configurations:
           '[/**]':
