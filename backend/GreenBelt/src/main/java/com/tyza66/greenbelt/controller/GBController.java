@@ -35,8 +35,30 @@ public class GBController {
     @GetMapping("/getWendu/{address}")
     public JSON getWendu(@PathVariable String address){
         String s = jedis.get("Wendu_" + address);
-        JSONObject wendu = JSONUtil.createObj().set("Wendu", s);
+        JSONObject wendu = JSONUtil.createObj()
+        if(s == null){
+            String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
+            JSONObject entries = JSONUtil.parseObj(jsonS);
+            Object wendu1 = entries.get("Wendu");
+            wendu.set("Wendu", wendu1);
+        }else{
+            wendu.set("Wendu", s);
+        }
         return wendu;
+    }
+
+    @GetMapping("/getShidu/{address}")
+    public JSON getShidu(@PathVariable String address){
+        String s = jedis.get("Shi1du_" + address);
+        JSONObject shidu = JSONUtil.createObj().set("Shidu", s);
+        return shidu;
+    }
+
+    @GetMapping("/getLiangdu/{address}")
+    public JSON getiangdu(@PathVariable String address){
+        String s = jedis.get("Liangdu_" + address);
+        JSONObject liangdu = JSONUtil.createObj().set("Liangdu", s);
+        return liangdu;
     }
 }
 
