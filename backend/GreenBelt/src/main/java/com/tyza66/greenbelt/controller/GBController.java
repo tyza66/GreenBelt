@@ -35,8 +35,8 @@ public class GBController {
     @GetMapping("/getWendu/{address}")
     public JSON getWendu(@PathVariable String address){
         String s = jedis.get("Wendu_" + address);
-        JSONObject wendu = JSONUtil.createObj()
-        if(s == null){
+        JSONObject wendu = JSONUtil.createObj();
+        if(s == null){ //缓存击穿的情况
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
             JSONObject entries = JSONUtil.parseObj(jsonS);
             Object wendu1 = entries.get("Wendu");
