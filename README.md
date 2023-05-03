@@ -1,4 +1,4 @@
-# Green Belt
+# yGreen Belt
 ### 基于大数据和物联网的可视化城市绿化带自动灌溉系统
 > ##### *A Visualized Urban Greenbelt Automatic Irrigation System Based on Big Data and Internet of Things*
 >
@@ -89,8 +89,64 @@
 
 9. #### 本地复现
 
+   mysql数据库：
+
    ```mysql
-   mysql数据库准备
+   使用
+   ```
+
+   redis数据库：
+
+   ```sql
+
+   ```
+
+   go后端服务：
+
+   ```go
+
+   ```
+
+   nginx网关服务：
+
+   ```yml
+
+   ```
+
+   nacos注册中心：
+
+   ```yml
+
+   ```
+
+   gateway网关服务：
+
+   ```
+
+   ```
+
+   SpringBoot后端服务：
+
+   ```
+
+   ```
+
+   Node前端服务：
+
+   ```javascript
+
+   ```
+
+   小程序/App：
+
+   ```
+   直接安装、访问即可
+   ```
+
+   物联网设备：
+
+   ```
+
    ```
 
    ​
