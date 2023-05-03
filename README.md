@@ -1,4 +1,4 @@
-# yGreen Belt
+# Green Belt
 ### 基于大数据和物联网的可视化城市绿化带自动灌溉系统
 > ##### *A Visualized Urban Greenbelt Automatic Irrigation System Based on Big Data and Internet of Things*
 >
@@ -92,49 +92,68 @@
    mysql数据库：
 
    ```mysql
-   使用
+   本地需要有较新版本的mysql，可以在docker容器或虚拟机或外部物理设备等，只有能访问到即可
+   创建数据库名为GreenBelt（改成其它名字需要修改其他后端代码）
+   执行'database/mysql'中的日期最新的一组sql脚本进行快速建表
+   （如果想手动建表自行观察表结构建表）
+   修改java，go后端集群部分中的配置信息（表名，用户名，密码等）
    ```
 
    redis数据库：
 
    ```sql
-
+   部署可被访问到的redis
+   修改java，go后端集群部分中的配置信息（用户名，密码，是否有密码等）
    ```
 
    go后端服务：
 
    ```go
-
+   联网导入依赖
+   可以选择使用goland直接执行项目
+   或进去文件夹后执行下列cmd命令
+   go run GreenBeltGoRun.go
    ```
 
    nginx网关服务：
 
    ```yml
-
+   下载可用的任意平台nginx发行版
+   使用以'gateway/nginx反向代理'为例的反向代理配置文件代理全部指向go后端集群的每台单机设备的地址
+   nginx -s reload
    ```
 
    nacos注册中心：
 
    ```yml
-
+   下载Nacos1.4.1
+   修改配置文件中的集群模式和数据持久化模式
+   执行startup运行nacos服务
+   将nacos服务置于后台或者服务中
    ```
 
    gateway网关服务：
 
    ```
-
+   修改nacos发现配置
+   添加springboot集群中的各个表层同级服务到配置文件中反向代理
+   修改配置文件中跨域限制
+   使用idea编译运行或自行使用Java命令执行
    ```
 
    SpringBoot后端服务：
 
    ```
-
+   使用maven联网导入依赖
+   使用idea编译运行或自行使用Java命令执行springboot项目
    ```
 
    Node前端服务：
 
    ```javascript
-
+   npm i
+   npm run serve
+   直接访问
    ```
 
    小程序/App：
