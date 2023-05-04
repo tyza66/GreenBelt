@@ -28,7 +28,6 @@ import java.util.Random;
  **/
 @Api(tags = "用户登录模块")
 @SessionAttributes("currentUser")
-//@CrossOrigin(allowCredentials="true",allowedHeaders = "",methods = {RequestMethod.GET,RequestMethod.POST},origins = {"localhost:8080"})
 @RestController
 @RequestMapping("/user")
 public class UserController {

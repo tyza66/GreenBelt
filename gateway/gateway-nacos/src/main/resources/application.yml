@@ -16,6 +16,7 @@ spring:
           '[/**]':  #拦截的请求
             allowedOrigins: #允许跨域的请求
               - "http://localhost:8080"
+              - "http://127.0.0.1:8080"
               - "http://192.168.100.103:8080"
             allowedMethods: #运行跨域的请求方式
               - "GET"

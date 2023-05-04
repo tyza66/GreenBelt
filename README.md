@@ -21,7 +21,7 @@
 
    开发环境：Idea2020，Maven3.6，Java1.8，Nacos1.4.1，Goland2021，Golang1.20，Git
 
-   Java应用技术：Spring Boot2.7.11，Spring Cloud，Spring Cloud Alibaba，Nacos，Gateway，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)，Hutool
+   Java应用技术：Spring Boot2.7.11，Spring Cloud，Spring Cloud Alibaba，Nacos，Gateway，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)，Hutool，java-jwt
 
    Go使用技术：Gin，xorm，Redigo，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
 
@@ -41,7 +41,7 @@
 
    小程序部分说明：由于我们使用Uniapp一站式开发，小程序随时可以打包，是否上线小程序还待考虑
 
-   说明：我们采用前后端分离的思想，并尽力消除跨域时出现的问题。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页端可视化的体验，另一致力于App和小程序的体验
+   说明：我们采用前后端分离的思想，并尽力消除[跨域时出现的问题](#其他说明)。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页端可视化的体验，另一致力于App和小程序的体验
 
    项目中对应文件夹：frontend
 
@@ -87,6 +87,8 @@
     完整性：由于本项目为比赛项目，缺少设备和时间，我们对单个物联网集群设备只进行了基础实现
 
     混合型分布式架构：我们使用手写的方式实现分布式请求和Spring Cloud Alibaba系列注册中心Nacos提供微服务可拓展性相结合，大幅度无上限提高运行稳定性和效率。我们的演示项目是单台设备运行，单台服务器部署，可能无法体现优势。
+
+    跨域问题：由于网关传输协议规格的限制，session会话机制无法正常使用，我们使用session中存储cookie的方式检验登录状态，在这种模式下，我们可以使用多关键字加密的方式避免撞库登录的现象
 
     不足：硬件层面，缺乏硬件设备(继电器，水泵，蜂鸣器等)我们均使用红色发光二极管代替
 
