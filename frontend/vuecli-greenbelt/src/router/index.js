@@ -20,7 +20,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView
-  },
+  },{
+    path: '/sign',
+    name: 'sign',
+    component: () => import('../views/SignView.vue')
+  }
 ]
 
 const router = createRouter({
