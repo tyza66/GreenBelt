@@ -11,10 +11,18 @@
                 </svg></a>
         </div>
         <div class="left">
-            <marquee loop=1 behavior=slide scrollamount="18"><font id="word1">绿色城建</font></marquee>
-            <marquee loop=1 behavior=slide direction="right" scrollamount="18"><font id="word2">低碳生活</font></marquee>
-            <marquee loop=1 behavior=slide  scrollamount="18"><font id="word3">数字灌溉</font></marquee>
-            <marquee loop=1 behavior=slide direction="right" scrollamount="18"><font id="word4">全民共享</font></marquee>
+            <marquee loop=1 behavior=slide scrollamount="18">
+                <font id="word1">绿色城建</font>
+            </marquee>
+            <marquee loop=1 behavior=slide direction="right" scrollamount="18">
+                <font id="word2">低碳生活</font>
+            </marquee>
+            <marquee loop=1 behavior=slide scrollamount="18">
+                <font id="word3">数字灌溉</font>
+            </marquee>
+            <marquee loop=1 behavior=slide direction="right" scrollamount="18">
+                <font id="word4">全民共享</font>
+            </marquee>
         </div>
         <div class="right">
             <form class="form">
@@ -44,13 +52,13 @@
                         </svg>
                     </span>
                 </div>
-                <button class="submit" type="submit">
+                <button class="submit" type="submit" @click="login()">
                     登录
                 </button>
 
                 <p class="signup-link">
                     没有账号?
-                    <a href="">注册</a>
+                    <a href="./sign" target="_self">注册</a>
                 </p>
             </form>
 
@@ -167,7 +175,7 @@
     width: 100%;
     border-radius: 0.5rem;
     text-transform: uppercase;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .signup-link {
@@ -187,28 +195,32 @@
     top: 30%;
 }
 
-.left{
+.left {
     position: absolute;
     width: 450px;
     left: 15%;
     top: 25%;
 }
-#word1{
+
+#word1 {
     font-size: 55px;
     color: #58545471;
     text-shadow: 5px 5px rgba(0, 0, 0, 0.05);
 }
-#word2{
+
+#word2 {
     font-size: 50px;
     color: #3c3a3ac8;
     text-shadow: 5px 5px rgba(0, 0, 0, 0.05);
 }
-#word3{
+
+#word3 {
     font-size: 60px;
     color: #4f4d4d9e;
     text-shadow: 5px 5px rgba(0, 0, 0, 0.05);
 }
-#word4{
+
+#word4 {
     font-size: 85px;
     color: #cacacabb;
     text-shadow: 5px 5px rgba(0, 0, 0, 0.05);
@@ -229,7 +241,9 @@ export default {
 
     },
     methods: {
-
+        login() {
+            alert(96)
+        }
     }
 }
 </script>
