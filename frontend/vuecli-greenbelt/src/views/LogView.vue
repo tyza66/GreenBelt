@@ -10,7 +10,9 @@
                     </path>
                 </svg></a>
         </div>
-        <div class="left"></div>
+        <div class="left">
+            
+        </div>
         <div class="right">
             <form class="form">
                 <p class="form-title">用户登录</p>
@@ -180,6 +182,16 @@ body {
     position: absolute;
     right: 10%;
     top: 30%;
+}
+
+.left{
+    position: absolute;
+    width: 600px;
+    height: 350px;
+    left: 10%;
+    top: 25%;
+    border: #6e6e6e 2px solid;
+    box-shadow: 1px 1px 10px;
 }
 </style>
 
