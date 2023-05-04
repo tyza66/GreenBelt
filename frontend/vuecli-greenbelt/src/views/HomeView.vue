@@ -20,7 +20,7 @@
           <form class="form">
               <p class="form-title">用户登录</p>
               <div class="input-container">
-                  <input placeholder="在此输入账号" type="email">
+                  <input placeholder="在此输入账号" type="text">
                   <span>
                       <svg t="1683165208167" class="icon" viewBox="0 0 1024 1024" version="1.1"
                           xmlns="http://www.w3.org/2000/svg" p-id="1487" width="200" height="200">
@@ -44,13 +44,13 @@
                       </svg>
                   </span>
               </div>
-              <button class="submit" type="submit">
+              <button class="submit" type="submit" @click="login()">
                   登录
               </button>
 
               <p class="signup-link">
                   没有账号?
-                  <a href="">注册</a>
+                  <a href="./sign" target="_self">注册</a>
               </p>
           </form>
 
@@ -229,7 +229,9 @@ export default {
 
   },
   methods: {
-
+    login(){
+      alert(96)
+    }
   }
 }
 </script>
