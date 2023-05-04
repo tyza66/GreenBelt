@@ -11,7 +11,7 @@
                 </svg></a>
         </div>
         <div class="right1">
-            <form class="form_container">
+            <div class="form_container">
                 <div class="title_container">
                     <p class="title">用户注册</p>
                     <span class="subtitle">欢迎来到注册界面!</span>
@@ -28,8 +28,8 @@
                             d="M896 128H128a96 96 0 0 0-96 96v576a96 96 0 0 0 96 96h768a96 96 0 0 0 96-96V224a96 96 0 0 0-96-96z m32 672a32 32 0 0 1-32 32H128a32 32 0 0 1-32-32V224a32 32 0 0 1 32-32h768a32 32 0 0 1 32 32v576z"
                             p-id="4319"></path>
                     </svg>
-                    <input placeholder="请在此输入用户名" title="Inpit title" name="input-yhm" type="text" class="input_field"
-                        id="email_field">
+                    <input placeholder="请在此输入用户名" v-model="username" title="Inpit title" name="input-yhm" type="text"
+                        class="input_field" id="email_field">
                 </div>
                 <div class="input_container">
                     <label class="input_label" for="password_field">账号</label>
@@ -39,8 +39,8 @@
                             d="M657.408 567.808c89.088-49.152 149.504-144.384 149.504-253.952 0-160.256-130.048-289.792-289.792-289.792S227.328 154.112 227.328 314.368c0 109.056 60.416 204.288 149.504 253.952-187.904 59.392-323.584 235.008-323.584 442.368h57.856c0-224.256 181.76-406.016 406.016-406.016s406.016 181.76 406.016 406.016h57.856c0-207.872-135.68-383.488-323.584-442.88zM285.184 314.368C285.184 185.856 389.12 81.92 517.12 81.92s231.936 103.936 231.936 231.936-103.936 232.448-231.936 232.448-231.936-103.936-231.936-231.936z"
                             p-id="3136"></path>
                     </svg>
-                    <input placeholder="请在此输入账号" title="Inpit title" name="input-zh" type="text" class="input_field"
-                        id="password_field">
+                    <input placeholder="请在此输入账号" v-model="account" title="Inpit title" name="input-zh" type="text"
+                        class="input_field" id="password_field">
                 </div>
                 <div class="input_container">
                     <label class="input_label" for="password_field">密码</label>
@@ -55,8 +55,8 @@
                             d="M21.2046 15.1045L20.6242 15.6956V15.6956L21.2046 15.1045ZM21.4196 16.4767C21.7461 16.7972 22.2706 16.7924 22.5911 16.466C22.9116 16.1395 22.9068 15.615 22.5804 15.2945L21.4196 16.4767ZM18.0228 15.1045L17.4424 14.5134V14.5134L18.0228 15.1045ZM18.2379 18.0387C18.5643 18.3593 19.0888 18.3545 19.4094 18.028C19.7299 17.7016 19.7251 17.1771 19.3987 16.8565L18.2379 18.0387ZM14.2603 20.7619C13.7039 21.3082 12.7957 21.3082 12.2394 20.7619L11.0786 21.9441C12.2794 23.1232 14.2202 23.1232 15.4211 21.9441L14.2603 20.7619ZM12.2394 20.7619C11.6914 20.2239 11.6914 19.358 12.2394 18.82L11.0786 17.6378C9.86927 18.8252 9.86927 20.7567 11.0786 21.9441L12.2394 20.7619ZM12.2394 18.82C12.7957 18.2737 13.7039 18.2737 14.2603 18.82L15.4211 17.6378C14.2202 16.4587 12.2794 16.4587 11.0786 17.6378L12.2394 18.82ZM14.2603 18.82C14.8082 19.358 14.8082 20.2239 14.2603 20.7619L15.4211 21.9441C16.6304 20.7567 16.6304 18.8252 15.4211 17.6378L14.2603 18.82ZM20.6242 15.6956L21.4196 16.4767L22.5804 15.2945L21.785 14.5134L20.6242 15.6956ZM15.4211 18.82L17.8078 16.4767L16.647 15.2944L14.2603 17.6377L15.4211 18.82ZM17.8078 16.4767L18.6032 15.6956L17.4424 14.5134L16.647 15.2945L17.8078 16.4767ZM16.647 16.4767L18.2379 18.0387L19.3987 16.8565L17.8078 15.2945L16.647 16.4767ZM21.785 14.5134C21.4266 14.1616 21.0998 13.8383 20.7993 13.6131C20.4791 13.3732 20.096 13.1716 19.6137 13.1716V14.8284C19.6145 14.8284 19.619 14.8273 19.6395 14.8357C19.6663 14.8466 19.7183 14.8735 19.806 14.9391C19.9969 15.0822 20.2326 15.3112 20.6242 15.6956L21.785 14.5134ZM18.6032 15.6956C18.9948 15.3112 19.2305 15.0822 19.4215 14.9391C19.5091 14.8735 19.5611 14.8466 19.5879 14.8357C19.6084 14.8273 19.6129 14.8284 19.6137 14.8284V13.1716C19.1314 13.1716 18.7483 13.3732 18.4281 13.6131C18.1276 13.8383 17.8008 14.1616 17.4424 14.5134L18.6032 15.6956Z">
                         </path>
                     </svg>
-                    <input placeholder="请在此输入密码" title="Inpit title" name="input-mm" type="text" class="input_field"
-                        id="password_field">
+                    <input placeholder="请在此输入密码" v-model="password" title="Inpit title" name="input-mm" type="text"
+                        class="input_field" id="password_field">
                 </div>
                 <div class="input_container">
                     <label class="input_label" for="password_field">验证码</label>
@@ -69,16 +69,17 @@
                             d="M641.8 351 467 580.3l-89-76.1c-5.3-4.5-12.1-7-19.1-7-8.6 0-16.8 3.7-22.4 10.3-10.5 12.3-9.1 31 3.3 41.5l112.7 96.4c5.2 4.4 12.4 7 19.6 7 0.9 0 1.8 0 2.7-0.1 8-0.8 15.4-5 20.3-11.4l193.7-254c4.8-6.3 6.8-14 5.7-21.8-1-7.8-5.1-14.7-11.3-19.5C670.1 335.6 651.6 338.1 641.8 351z"
                             p-id="5477"></path>
                     </svg>
-                    <input placeholder="请在此输入验证码" title="Inpit title" name="input-yzm" type="text" class="input_field"
-                        id="password_field">
+                    <div class="in_container2">
+                        <input placeholder="请在此输入验证码" v-model="mqcr" title="Inpit title" name="input-yzm" type="text"
+                            class="input_field yzm" id="password_field"><el-image class="yzmtp" @click="reqcr()" :src="qcr"
+                            :fit="fit" />
+                    </div>
                 </div>
-                <button title="Sign In" type="submit" class="sign-in_btn">
+                <button title="Sign In" type="submit" class="sign-in_btn" @click="sign()">
                     <span>注 册</span>
                 </button>
-
-
                 <p class="note">已有账号? <a href="../" target="_self">登录</a></p>
-            </form>
+            </div>
         </div>
 
     </div>
@@ -172,6 +173,15 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 5px;
+}
+
+.in_container2 {
+    width: 100%;
+    height: fit-content;
+    position: relative;
+    display: flex;
+    flex-direction: row;
     gap: 5px;
 }
 
@@ -271,6 +281,17 @@
     color: #8B8E98;
     text-decoration: underline;
 }
+
+.yzm {
+    width: 390px;
+    display: inline-block;
+}
+
+.yzmtp {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+}
 </style>
 
 <script>
@@ -282,28 +303,53 @@ export default {
     data() {
         return {
             username: "",
-            password: ""
+            account: "",
+            password: "",
+            mqcr: "",
+            qcr: "http://192.168.100.103:9090/user/qcr"
         }
     },
     created() {
 
     },
     methods: {
-        login() {
-            request.post('http://192.168.100.103:8888/user/login', {
-                account: this.username,
-                password: this.password
+        reqcr() {
+            var timestamp = new Date().getTime();
+            this.qcr = "http://192.168.100.103:9090/user/qcr?t=" + timestamp
+        },
+        sign() {
+            var that = this
+            request.post('http://192.168.100.103:8888/user/sign', {
+                "account": this.account,
+                "id": 0,
+                "nickname": this.mqcr,
+                "password": this.password,
+                "statu": 1,
+                "username": this.username
             })
                 .then(function (response) {
-                    console.log(response)
-                    if (response.statu == "true") {
+                    if(response.statu == "ok"){
                         ElMessage({
-                            message: '登陆成功!',
+                            message: '注册成功!',
                             type: 'success',
                         })
-                    } else {
                         ElMessage({
-                            message: '登录失败,用户名或密码错误!',
+                            message: '正在跳转登录!',
+                            type: 'success',
+                        })
+                        window.location.href = "../"
+                    }
+                    if(response.statu == "yzm"){
+                        ElMessage({
+                            message: '验证码错误!',
+                            type: 'warning',
+                        })
+                        that.mqcr = ""
+                        that.reqcr()
+                    }
+                    if(response.statu == "sjk"){
+                        ElMessage({
+                            message: '您输入的信息有误或用户已存在!',
                             type: 'warning',
                         })
                     }
@@ -311,11 +357,10 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                     ElMessage({
-                        message: '登录错误.',
+                        message: '注册失败!',
                         type: 'warning',
                     })
                 });
-
         }
     }
 }

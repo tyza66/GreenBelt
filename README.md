@@ -159,6 +159,7 @@
 
     ```javascript
     npm i
+    修改调用接口的地址和资源的请求地址
     npm run serve
     访问地址
     ```
