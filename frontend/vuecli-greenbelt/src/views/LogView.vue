@@ -25,10 +25,10 @@
             </marquee>
         </div>
         <div class="right">
-            <form class="form">
+            <div class="form">
                 <p class="form-title">用户登录</p>
                 <div class="input-container">
-                    <input placeholder="在此输入账号" type="email">
+                    <input placeholder="在此输入账号" type="text" v-model="username">
                     <span>
                         <svg t="1683165208167" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="1487" width="200" height="200">
@@ -39,7 +39,7 @@
                     </span>
                 </div>
                 <div class="input-container">
-                    <input placeholder="在此输入密码" type="password">
+                    <input placeholder="在此输入密码" type="password" v-model="password">
                     <span>
                         <svg t="1683165242473" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="2470" width="200" height="200">
@@ -52,7 +52,7 @@
                         </svg>
                     </span>
                 </div>
-                <button class="submit" type="submit" @click="login()">
+                <button class="submit" @click="login()">
                     登录
                 </button>
 
@@ -60,7 +60,7 @@
                     没有账号?
                     <a href="./sign" target="_self">注册</a>
                 </p>
-            </form>
+            </div>
 
         </div>
     </div>
@@ -228,13 +228,15 @@
 </style>
 
 <script>
-//import { request } from '@/utils/request';
+import { request } from '@/utils/request';
+import { ElMessage } from 'element-plus'
 
 export default {
     name: 'LogView',
     data() {
         return {
-
+            username: "",
+            password: ""
         }
     },
     created() {
@@ -242,7 +244,32 @@ export default {
     },
     methods: {
         login() {
-            alert(96)
+            request.post('http://192.168.100.103:8888/user/login', {
+                account: this.username,
+                password: this.password
+            })
+                .then(function (response) {
+                    console.log(response)
+                    if (response.statu == "true") {
+                        ElMessage({
+                            message: '登陆成功!',
+                            type: 'success',
+                        })
+                    } else {
+                        ElMessage({
+                            message: '登录失败,用户名或密码错误!',
+                            type: 'warning',
+                        })
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    ElMessage({
+                        message: '登录错误.',
+                        type: 'warning',
+                    })
+                });
+
         }
     }
 }

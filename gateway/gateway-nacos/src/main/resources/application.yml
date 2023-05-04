@@ -11,12 +11,21 @@ spring:
           predicates:
             - Path=/**
       globalcors:
+        add-to-simple-url-handler-mapping: true
         cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
+          '[/**]':  #拦截的请求
+            allowedOrigins: #允许跨域的请求
+              - "http://localhost:8080"
+              - "http://192.168.100.103:8080"
+            allowedMethods: #运行跨域的请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" #允许请求中携带的头信息
+            allowedCredentials: true #是否允许携带cookie
+            maxAge: 36000 #跨域检测的有效期,单位s
 
     nacos:
       discovery:
