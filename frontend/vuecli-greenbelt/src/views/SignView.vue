@@ -349,7 +349,13 @@ export default {
                     }
                     if(response.statu == "sjk"){
                         ElMessage({
-                            message: '您输入的信息有误或用户已存在!',
+                            message: '您输入的信息有误!',
+                            type: 'warning',
+                        })
+                    }
+                    if(response.statu == "have"){
+                        ElMessage({
+                            message: '用户已存在!',
                             type: 'warning',
                         })
                     }

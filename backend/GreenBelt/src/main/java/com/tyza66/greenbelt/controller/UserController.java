@@ -28,6 +28,7 @@ import java.util.Random;
  **/
 @Api(tags = "用户登录模块")
 @SessionAttributes("currentUser")
+//@CrossOrigin(allowCredentials="true",allowedHeaders = "",methods = {RequestMethod.GET,RequestMethod.POST},origins = {"localhost:8080"})
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -58,7 +59,7 @@ public class UserController {
         if (currentUser != null) {
             toJson = JSONUtil.parseObj(currentUser);
         } else {
-            toJson.set("status", "-1");
+            toJson.set("statu", "-1");
         }
         return toJson;
     }
@@ -92,7 +93,7 @@ public class UserController {
 
     //提供随机种子
     public String getNumbers(int size) {
-        String str = "df5d6as2ekfofsaffp66sgfsg8a6fhoi635g4s56g4s65gg5464f4ewgs22d65g";
+        String str = "df5d6daas2ekfofsaffp66sgfsgfsd8a6fhoi635g4s56g4sgfgd65ggsg5464f4ewgs22d65g";
         String number = "";
         Random r = new Random();
         for (int i = 0; i < size; i++) {
@@ -104,15 +105,20 @@ public class UserController {
     @ApiOperation(value = "注册新用户")
     @PostMapping("/sign")
     public JSON sign(@RequestBody User user) {
+        List<User> userByAccount = userMapper.getUserByAccount(user.getAccount());
         JSONObject json = JSONUtil.createObj();
-        if (user.getNickname().equalsIgnoreCase(number)) {
-            if (userMapper.newUserCount(user) >= 1) {
-                json.set("statu", "ok");
-            } else {
-                json.set("statu", "sjk");
-            }
+        if (userByAccount.size() >= 1) {
+            json.set("statu", "have");
         } else {
-            json.set("statu", "yzm");
+            if (user.getNickname().equalsIgnoreCase(number)) {
+                if (userMapper.newUserCount(user) >= 1) {
+                    json.set("statu", "ok");
+                } else {
+                    json.set("statu", "sjk");
+                }
+            } else {
+                json.set("statu", "yzm");
+            }
         }
         return json;
     }
