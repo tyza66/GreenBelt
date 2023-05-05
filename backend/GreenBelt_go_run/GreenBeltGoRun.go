@@ -69,13 +69,24 @@ func main() {
 	counts, _ := engine.Count(&GBBars{Group: 1})
 	//读取数据库中的设备列表并将数据列表入队列
 	rows, _ := engine.Rows(&GBBars{Group: 1})
+	rows2, _ := engine.Rows(&GBArea{})
 	//定义设备队列
 	drivers := GBQueue{buff: make([]string, counts), maxsize: int(counts), front: -1, rear: -1}
+	areaMax := map[string]string{}
+	areaMin := map[string]string{}
 	userBean := new(GBBars)
+	userBean2 := new(GBArea)
 	for rows.Next() {
 		rows.Scan(userBean)
 		if userBean.Address != "" {
 			drivers.Push(userBean.Address)
+		}
+	}
+	for rows2.Next() {
+		rows2.Scan(userBean2)
+		if userBean2.Address != "" {
+			areaMax[userBean2.Address] = userBean2.Max
+			areaMin[userBean2.Address] = userBean2.Min
 		}
 	}
 	//创建go程排队用的信道
