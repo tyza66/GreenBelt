@@ -242,7 +242,7 @@ export default {
     created() {
         request.get('http://192.168.100.103:8888/user/logined')
             .then(function (response) {
-                if (response.statu == "1") {
+                if (response.status == "ok") {
                     ElMessage({
                         message: '已登录,正在跳转!',
                         type: 'success',
@@ -252,15 +252,11 @@ export default {
             })
             .catch(function (error) {
                 console.log(error);
-                ElMessage({
-                    message: '登录状态加载错误!',
-                    type: 'warning',
-                })
             });
     },
     methods: {
         login() {
-            request.post('http://192.168.100.103:8888/user/login', {
+            request.post('http://192.168.100.103:8888/userl/login', {
                 account: this.username,
                 password: this.password
             })
