@@ -17,24 +17,27 @@
           <el-tab-pane label="首页">
             <div class="sy">
               <div class="weather-continer">
-              <el-card class="box-card">
-                <template #header>
-                  <div class="card-header">
-                    <span>'北京'今日天气</span>
-                  </div>
-                </template>
-                <div>日期：{{weather.fxDate}}</div>
-                <div>日出时间：{{weather.sunrise}}</div>
-                <div>日落时间：{{weather.sunset}}</div>
-                <div>最高温度：{{weather.tempMax+"℃"}}</div>
-                <div>最低温度：{{weather.tempMin+"℃"}}</div>
-                <div>白天天气：{{weather.textDay}}</div>
-                <div>夜间天气：{{weather.textNight}}</div>
-                <div>白天风：{{weather.windDirDay+"，"+weather.windScaleDay+"级"}}</div>
-                <div>夜间风：{{weather.windDirNight+"，"+weather.windScaleNight+"级"}}</div>
-                <div>气压：{{weather.pressure}}</div>
-              </el-card>
-            </div>
+                <el-card class="box-card">
+                  <template #header>
+                    <div class="card-header">
+                      <span>'北京'今日天气</span>
+                    </div>
+                  </template>
+                  <div>日期：{{ weather.fxDate }}</div>
+                  <div>日出时间：{{ weather.sunrise }}</div>
+                  <div>日落时间：{{ weather.sunset }}</div>
+                  <div>最高温度：{{ weather.tempMax + "℃" }}</div>
+                  <div>最低温度：{{ weather.tempMin + "℃" }}</div>
+                  <div>白天天气：{{ weather.textDay }}</div>
+                  <div>夜间天气：{{ weather.textNight }}</div>
+                  <div>白天风：{{ weather.windDirDay + "，" + weather.windScaleDay + "级" }}</div>
+                  <div>夜间风：{{ weather.windDirNight + "，" + weather.windScaleNight + "级" }}</div>
+                  <div>气压：{{ weather.pressure }}</div>
+                </el-card>
+              </div>
+              <div id="main1" ref="chart1">
+
+              </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="设备信息">
@@ -138,14 +141,23 @@
   width: 280px;
 }
 
-.box-card{
+.box-card {
   background-color: rgba(255, 255, 255, 0.20) !important;
 }
-.box-card div{
+
+.box-card div {
   line-height: 20px;
 }
-.weather-continer{
-  width:280px;
+
+.weather-continer {
+  width: 280px;
+  float: left;
+}
+
+#main1{
+  width: 500px;
+  height: 300px;
+  background-color: antiquewhite;
   float: left;
 }
 </style>
@@ -153,12 +165,95 @@
 <script>
 import { request } from '@/utils/request';
 import { ElMessage } from 'element-plus'
-
+import * as echarts from 'echarts/core';
+import {
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent
+} from 'echarts/components';
+import { LineChart } from 'echarts/charts';
+import { UniversalTransition } from 'echarts/features';
+import { CanvasRenderer } from 'echarts/renderers';
+echarts.use([
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+  LineChart,
+  CanvasRenderer,
+  UniversalTransition
+]);
 export default {
   name: 'HomeView',
   data() {
     return {
-      weather: {}
+      weather: {},
+      myChart1: {},
+      option1: {
+        title: {
+          text: 'Stacked Line'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: 'Email',
+            type: 'line',
+            stack: 'Total',
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: 'Union Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: 'Video Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: 'Direct',
+            type: 'line',
+            stack: 'Total',
+            data: [320, 332, 301, 334, 390, 330, 320]
+          },
+          {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+          }
+        ]
+      }
     }
   },
   created() {
@@ -196,11 +291,11 @@ export default {
         if (response.code == '200') {
           that.weather = response.daily[0]
           //console.log(that.weather)
-        }else{
+        } else {
           ElMessage({
-          message: '天气信息获取失败!',
-          type: 'warning',
-        })
+            message: '天气信息获取失败!',
+            type: 'warning',
+          })
         }
       })
       .catch(function (error) {
@@ -211,55 +306,61 @@ export default {
         })
       });
   },
-  methods: {
-    addcookie(name, value, time) {
-      var strSec = this.getSec(time);
-      var exp = new Date();
-      exp.setTime(exp.getTime() + strSec * 1);
-      //设置cookie的名称、值、失效时间
-      document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
+  mounted() {
+    setTimeout(() => {
+        this.myChart1 = echarts.init(this.$refs.chart1);
+        this.option1 && this.myChart1.setOption(this.option1);
+      },5000)
     },
-    getCookie(name) {
-      //获取当前所有cookie
-      var strCookies = document.cookie;
-      //截取变成cookie数组
-      var array = strCookies.split(';');
-      //循环每个cookie
-      for (var i = 0; i < array.length; i++) {
-        //将cookie截取成两部分
-        var item = array[i].split("=");
-        //判断cookie的name 是否相等
-        if (item[0] == name) {
-          return item[1];
+      methods: {
+      addcookie(name, value, time) {
+        var strSec = this.getSec(time);
+        var exp = new Date();
+        exp.setTime(exp.getTime() + strSec * 1);
+        //设置cookie的名称、值、失效时间
+        document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
+      },
+      getCookie(name) {
+        //获取当前所有cookie
+        var strCookies = document.cookie;
+        //截取变成cookie数组
+        var array = strCookies.split(';');
+        //循环每个cookie
+        for (var i = 0; i < array.length; i++) {
+          //将cookie截取成两部分
+          var item = array[i].split("=");
+          //判断cookie的name 是否相等
+          if (item[0] == name) {
+            return item[1];
+          }
+        }
+        return null;
+      },
+      delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        //获取cookie是否存在
+        var value = this.getCookie(name);
+        if (value != null) {
+          document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
+        }
+      },
+      getSec(str) {
+        var str1 = str.substr(0, str.length - 1);  //时间数值 
+        var str2 = str.substr(str.length - 1, 1);    //时间单位
+        if (str2 == "s") {
+          return str1 * 1000;
+        }
+        else if (str2 == "m") {
+          return str1 * 60 * 1000;
+        }
+        else if (str2 == "h") {
+          return str1 * 60 * 60 * 1000;
+        }
+        else if (str2 == "d") {
+          return str1 * 24 * 60 * 60 * 1000;
         }
       }
-      return null;
-    },
-    delCookie(name) {
-      var exp = new Date();
-      exp.setTime(exp.getTime() - 1);
-      //获取cookie是否存在
-      var value = this.getCookie(name);
-      if (value != null) {
-        document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
-      }
-    },
-    getSec(str) {
-      var str1 = str.substr(0, str.length - 1);  //时间数值 
-      var str2 = str.substr(str.length - 1, 1);    //时间单位
-      if (str2 == "s") {
-        return str1 * 1000;
-      }
-      else if (str2 == "m") {
-        return str1 * 60 * 1000;
-      }
-      else if (str2 == "h") {
-        return str1 * 60 * 60 * 1000;
-      }
-      else if (str2 == "d") {
-        return str1 * 24 * 60 * 60 * 1000;
-      }
     }
-  }
 }
 </script>
