@@ -23,7 +23,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         //从 http 请求头中取出 token
         String token = request.getHeader("token");
-        System.out.println("此处测试是否拿到了token：" + token);
+        //System.out.println("此处测试是否拿到了token：" + token);
 
         if (token == null) {
             throw new RuntimeException("无 token ，请重新登陆");

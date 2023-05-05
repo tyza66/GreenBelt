@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
@@ -37,9 +38,12 @@ public class UserController {
 
     @ApiOperation(value = "验证登录状态")
     @GetMapping("/logined")
-    public JSON logined() {
+    public JSON logined(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Map<String, Object> info = JwtUtil.getInfo(token);
         JSONObject toJson = JSONUtil.createObj();
         toJson.set("status","ok");
+        toJson.set("username",info.get("username"));
         return toJson;
     }
 
