@@ -14,10 +14,33 @@
     <div class="down">
       <div class="bar">
         <el-tabs style="height: 200px" class="demo-tabs">
-          <el-tab-pane label="首页">User</el-tab-pane>
-          <el-tab-pane label="设备信息">Config</el-tab-pane>
-          <el-tab-pane label="设备管理">Role</el-tab-pane>
-          <el-tab-pane label="关于">Task</el-tab-pane>
+          <el-tab-pane label="首页">
+            <div class="sy">
+              <el-card class="box-card">
+                <template #header>
+                  <div class="card-header">
+                    <span>'北京'今日天气</span>
+                  </div>
+                </template>
+                <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+              </el-card>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="设备信息">
+            <div class="sbxx">
+
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="设备管理">
+            <div class="sbgl">
+
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="关于">
+            <div class="gy">
+
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -30,10 +53,12 @@
   width: 120px;
   height: 230px;
 }
-.bar{
+
+.bar {
   width: 100%;
   margin: 0 auto;
 }
+
 .el-tabs__nav-wrap::after {
   content: "";
   position: absolute;
@@ -45,9 +70,11 @@
   z-index: var(--el-index-normal);
   display: none;
 }
+
 .el-tabs__nav-scroll {
   background-color: rgba(239, 239, 239, 0.236);
 }
+
 .el-tabs__item {
   padding: 10px 40px !important;
   height: var(--el-tabs-header-height);
@@ -61,6 +88,44 @@
   color: var(--el-text-color-primary);
   position: relative;
 }
+
+.sy {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.sbxx {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.sbgl {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.gy {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  width: 480px;
+}
 </style>
 
 <script>
@@ -71,10 +136,11 @@ export default {
   name: 'HomeView',
   data() {
     return {
-
+      weather: {}
     }
   },
   created() {
+    var that = this;
     var gbToken = this.getCookie("gbToken")
     request.get('http://192.168.100.103:8888/user/logined', {
       headers: {
@@ -102,6 +168,25 @@ export default {
           type: 'warning',
         })
         window.location.href = "../"
+      });
+    request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
+      .then(function (response) {
+        if (response.code == '200') {
+          that.weather = response
+          //console.log(that.weather)
+        }else{
+          ElMessage({
+          message: '天气信息获取失败!',
+          type: 'warning',
+        })
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        ElMessage({
+          message: '天气信息获取失败!',
+          type: 'warning',
+        })
       });
   },
   methods: {
