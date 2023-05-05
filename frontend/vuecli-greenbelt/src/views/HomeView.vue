@@ -90,7 +90,7 @@ export default {
         } else {
           ElMessage({
             message: '登录状态失效!',
-            type: 'success',
+            type: 'warning',
           })
           window.location.href = "../"
         }
@@ -99,7 +99,7 @@ export default {
         console.log(error);
         ElMessage({
           message: '登录状态无效!',
-          type: 'success',
+          type: 'warning',
         })
         window.location.href = "../"
       });
