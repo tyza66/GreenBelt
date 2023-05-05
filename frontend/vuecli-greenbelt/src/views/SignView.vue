@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main">
         <div class="head">
             <h1 class="title1">城市绿化带管理系统</h1>
             <a href="https://github.com/tyza66/GreenBelt" target="_blank"><svg id="github" height="32" aria-hidden="true"
