@@ -45,6 +45,12 @@ func main() {
 		Name    string
 		Group   int
 	}
+	//定义阈值上下限的数据库对象结构体
+	type GBArea struct {
+		Address string
+		Min    string
+		Max   string
+	}
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 	if err != nil {
@@ -52,6 +58,10 @@ func main() {
 	}
 	//同步数据库中的表
 	err = engine.Sync(new(GBBars))
+	if err != nil {
+		fmt.Println("同步表结构失败")
+	}
+	err = engine.Sync(new(GBArea))
 	if err != nil {
 		fmt.Println("同步表结构失败")
 	}

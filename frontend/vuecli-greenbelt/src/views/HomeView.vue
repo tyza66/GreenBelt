@@ -154,7 +154,7 @@
   float: left;
 }
 
-#main1{
+#main1 {
   width: 500px;
   height: 300px;
   background-color: antiquewhite;
@@ -179,12 +179,12 @@ import { CanvasRenderer } from 'echarts/renderers';
 echarts.use([
   TitleComponent,
   ToolboxComponent,
+  UniversalTransition,
   TooltipComponent,
   GridComponent,
   LegendComponent,
   LineChart,
-  CanvasRenderer,
-  UniversalTransition
+  CanvasRenderer
 ]);
 export default {
   name: 'HomeView',
@@ -193,64 +193,98 @@ export default {
       weather: {},
       myChart1: {},
       option1: {
-        title: {
-          text: 'Stacked Line'
-        },
+        color: ['#5470C6', '#EE6666'],
         tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
+          trigger: 'none',
+          axisPointer: {
+            type: 'cross'
           }
         },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        legend: {},
+        grid: {
+          top: 70,
+          bottom: 50
         },
-        yAxis: {
-          type: 'value'
-        },
+        xAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#EE6666'
+              }
+            },
+            axisPointer: {
+              label: {
+                formatter: function (params) {
+                  return (
+                    'Precipitation  ' +
+                    params.value +
+                    (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                  );
+                }
+              }
+            },
+            // prettier-ignore
+            data: ['2016-1', '2016-2', '2016-3', '2016-4', '2016-5', '2016-6', '2016-7', '2016-8', '2016-9', '2016-10', '2016-11', '2016-12']
+          },
+          {
+            type: 'category',
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#5470C6'
+              }
+            },
+            axisPointer: {
+              label: {
+                formatter: function (params) {
+                  return (
+                    'Precipitation  ' +
+                    params.value +
+                    (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                  );
+                }
+              }
+            },
+            // prettier-ignore
+            data: ['2015-1', '2015-2', '2015-3', '2015-4', '2015-5', '2015-6', '2015-7', '2015-8', '2015-9', '2015-10', '2015-11', '2015-12']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
         series: [
           {
-            name: 'Email',
+            name: 'Precipitation(2015)',
             type: 'line',
-            stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210]
+            xAxisIndex: 1,
+            smooth: true,
+            emphasis: {
+              focus: 'series'
+            },
+            data: [
+              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+            ]
           },
           {
-            name: 'Union Ads',
+            name: 'Precipitation(2016)',
             type: 'line',
-            stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: 'Video Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-            name: 'Direct',
-            type: 'line',
-            stack: 'Total',
-            data: [320, 332, 301, 334, 390, 330, 320]
-          },
-          {
-            name: 'Search Engine',
-            type: 'line',
-            stack: 'Total',
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
+            smooth: true,
+            emphasis: {
+              focus: 'series'
+            },
+            data: [
+              3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7
+            ]
           }
         ]
       }
@@ -308,59 +342,59 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-        this.myChart1 = echarts.init(this.$refs.chart1);
-        this.option1 && this.myChart1.setOption(this.option1);
-      },1)
+      this.myChart1 = echarts.init(this.$refs.chart1);
+      this.option1 && this.myChart1.setOption(this.option1);
+    }, 1)
+  },
+  methods: {
+    addcookie(name, value, time) {
+      var strSec = this.getSec(time);
+      var exp = new Date();
+      exp.setTime(exp.getTime() + strSec * 1);
+      //设置cookie的名称、值、失效时间
+      document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
     },
-      methods: {
-      addcookie(name, value, time) {
-        var strSec = this.getSec(time);
-        var exp = new Date();
-        exp.setTime(exp.getTime() + strSec * 1);
-        //设置cookie的名称、值、失效时间
-        document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
-      },
-      getCookie(name) {
-        //获取当前所有cookie
-        var strCookies = document.cookie;
-        //截取变成cookie数组
-        var array = strCookies.split(';');
-        //循环每个cookie
-        for (var i = 0; i < array.length; i++) {
-          //将cookie截取成两部分
-          var item = array[i].split("=");
-          //判断cookie的name 是否相等
-          if (item[0] == name) {
-            return item[1];
-          }
-        }
-        return null;
-      },
-      delCookie(name) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        //获取cookie是否存在
-        var value = this.getCookie(name);
-        if (value != null) {
-          document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
-        }
-      },
-      getSec(str) {
-        var str1 = str.substr(0, str.length - 1);  //时间数值 
-        var str2 = str.substr(str.length - 1, 1);    //时间单位
-        if (str2 == "s") {
-          return str1 * 1000;
-        }
-        else if (str2 == "m") {
-          return str1 * 60 * 1000;
-        }
-        else if (str2 == "h") {
-          return str1 * 60 * 60 * 1000;
-        }
-        else if (str2 == "d") {
-          return str1 * 24 * 60 * 60 * 1000;
+    getCookie(name) {
+      //获取当前所有cookie
+      var strCookies = document.cookie;
+      //截取变成cookie数组
+      var array = strCookies.split(';');
+      //循环每个cookie
+      for (var i = 0; i < array.length; i++) {
+        //将cookie截取成两部分
+        var item = array[i].split("=");
+        //判断cookie的name 是否相等
+        if (item[0] == name) {
+          return item[1];
         }
       }
+      return null;
+    },
+    delCookie(name) {
+      var exp = new Date();
+      exp.setTime(exp.getTime() - 1);
+      //获取cookie是否存在
+      var value = this.getCookie(name);
+      if (value != null) {
+        document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
+      }
+    },
+    getSec(str) {
+      var str1 = str.substr(0, str.length - 1);  //时间数值 
+      var str2 = str.substr(str.length - 1, 1);    //时间单位
+      if (str2 == "s") {
+        return str1 * 1000;
+      }
+      else if (str2 == "m") {
+        return str1 * 60 * 1000;
+      }
+      else if (str2 == "h") {
+        return str1 * 60 * 60 * 1000;
+      }
+      else if (str2 == "d") {
+        return str1 * 24 * 60 * 60 * 1000;
+      }
     }
+  }
 }
 </script>
