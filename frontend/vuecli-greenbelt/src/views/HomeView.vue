@@ -310,7 +310,7 @@ export default {
     setTimeout(() => {
         this.myChart1 = echarts.init(this.$refs.chart1);
         this.option1 && this.myChart1.setOption(this.option1);
-      },5000)
+      },1)
     },
       methods: {
       addcookie(name, value, time) {
