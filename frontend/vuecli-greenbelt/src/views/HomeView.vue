@@ -16,14 +16,25 @@
         <el-tabs style="height: 200px" class="demo-tabs">
           <el-tab-pane label="首页">
             <div class="sy">
+              <div class="weather-continer">
               <el-card class="box-card">
                 <template #header>
                   <div class="card-header">
                     <span>'北京'今日天气</span>
                   </div>
                 </template>
-                <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+                <div>日期：{{weather.fxDate}}</div>
+                <div>日出时间：{{weather.sunrise}}</div>
+                <div>日落时间：{{weather.sunset}}</div>
+                <div>最高温度：{{weather.tempMax+"℃"}}</div>
+                <div>最低温度：{{weather.tempMin+"℃"}}</div>
+                <div>白天天气：{{weather.textDay}}</div>
+                <div>夜间天气：{{weather.textNight}}</div>
+                <div>白天风：{{weather.windDirDay+"，"+weather.windScaleDay+"级"}}</div>
+                <div>夜间风：{{weather.windDirNight+"，"+weather.windScaleNight+"级"}}</div>
+                <div>气压：{{weather.pressure}}</div>
               </el-card>
+            </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="设备信息">
@@ -124,7 +135,18 @@
 }
 
 .box-card {
-  width: 480px;
+  width: 280px;
+}
+
+.box-card{
+  background-color: rgba(255, 255, 255, 0.20) !important;
+}
+.box-card div{
+  line-height: 20px;
+}
+.weather-continer{
+  width:280px;
+  float: left;
 }
 </style>
 
@@ -172,7 +194,7 @@ export default {
     request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
       .then(function (response) {
         if (response.code == '200') {
-          that.weather = response
+          that.weather = response.daily[0]
           //console.log(that.weather)
         }else{
           ElMessage({
