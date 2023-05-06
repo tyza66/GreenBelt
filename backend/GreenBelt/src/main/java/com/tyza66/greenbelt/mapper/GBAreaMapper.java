@@ -2,6 +2,7 @@ package com.tyza66.greenbelt.mapper;
 
 import com.tyza66.greenbelt.entity.GBArea;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -13,4 +14,7 @@ import java.util.List;
 public interface GBAreaMapper {
     @Select("select * from g_b_area")
     public List<GBArea> getGBAreas();
+
+    @Update("INSERT INTO `GreenBelt`.`g_b_area` (`address`, `min`, `max`) VALUES (#{address}, #{min}, #{max})")
+    public int addArea(String address,String min,String max);
 }

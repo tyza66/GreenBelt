@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface UserMapper {
     @Select("select * from user where account = #{account}")
-    public List<User> getUserByAccount(String account);
+    List<User> getUserByAccount(String account);
 
     @Update("INSERT INTO `GreenBelt`.`user` ( `account`, `password`, `username`, `nickname`, `statu`) VALUES (#{account}, #{password}, #{username}, #{nickname}, #{statu})")
     @Transactional
-    public int newUserCount(User user);
+    int newUserCount(User user);
 
 }

@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -115,6 +112,18 @@ public class GBController {
     public JSON getGBAreas(){
         List<GBArea> gbAreas = gbareaMapper.getGBAreas();
         return JSONUtil.parseArray(gbAreas);
+    }
+
+    @ApiOperation(value = "添加物联网设备")
+    @PostMapping("/addgbs")
+    public JSON addGBBars(){
+        return null;
+    }
+
+    @ApiOperation(value = "添加出水区间")
+    @GetMapping("/addgbareas")
+    public JSON addGBAreas(){
+        return null;
     }
 }
 
