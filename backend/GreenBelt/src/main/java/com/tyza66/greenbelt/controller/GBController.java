@@ -10,12 +10,13 @@ import com.tyza66.greenbelt.mapper.GBBarMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,7 +34,7 @@ public class GBController {
     RestTemplate restTemplate;
 
     @Autowired
-    Jedis jedis;
+    private RedisTemplate redisTemplate;
 
     @Resource
     GBBarMapper gbBarsMapper;
@@ -52,7 +53,9 @@ public class GBController {
     @ApiOperation(value = "获取指定设备温度")
     @GetMapping("/getWendu/{address}")
     public JSON getWendu(@PathVariable String address){
-        String s = jedis.get("Wendu_" + address);
+        ValueOperations ops = redisTemplate.opsForValue();
+        String s = (String)ops.get("Wendu_" + address);
+        //System.out.println(s);
         JSONObject wendu = JSONUtil.createObj();
         //System.out.println(s);
         if(s == null){ //缓存击穿的情况
@@ -69,7 +72,8 @@ public class GBController {
     @ApiOperation(value = "获取指定设备湿度")
     @GetMapping("/getShidu/{address}")
     public JSON getShidu(@PathVariable String address){
-        String s = jedis.get("Shidu_" + address);
+        ValueOperations ops = redisTemplate.opsForValue();
+        String s = (String) ops.get("Shidu_" + address);
         JSONObject shidu = JSONUtil.createObj();
         if (s == null){
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
@@ -85,7 +89,8 @@ public class GBController {
     @ApiOperation(value = "获取指定设备亮度")
     @GetMapping("/getLiangdu/{address}")
     public JSON getiangdu(@PathVariable String address){
-        String s = jedis.get("Liangdu_" + address);
+        ValueOperations ops = redisTemplate.opsForValue();
+        String s = (String)ops.get("Liangdu_" + address);
         JSONObject liangdu = JSONUtil.createObj();
         if (s == null){
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);

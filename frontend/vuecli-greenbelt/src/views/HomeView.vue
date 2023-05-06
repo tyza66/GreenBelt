@@ -542,7 +542,21 @@ export default {
               type: 'warning',
             })
           });
-        
+        setTimeout(function () {
+          request.get('http://192.168.100.103:8888/gb/getShidu/' + that.nowGbAddress)
+            .then(function (response) {
+              var b = response.Shidu
+              that.option2.series[0].data.shift();
+              that.option2.series[0].data.push(b);
+            })
+            .catch(function (error) {
+              console.log(error);
+              ElMessage({
+                message: '设备信息获取失败!',
+                type: 'warning',
+              })
+            });
+        }, 10)
       }, 2000)
       setInterval(function () {
         request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
