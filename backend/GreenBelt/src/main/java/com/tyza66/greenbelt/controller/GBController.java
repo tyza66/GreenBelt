@@ -34,7 +34,7 @@ public class GBController {
     RestTemplate restTemplate;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    RedisTemplate redisTemplate;
 
     @Resource
     GBBarMapper gbBarsMapper;

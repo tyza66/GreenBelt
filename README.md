@@ -21,7 +21,7 @@
 
    开发环境：Idea2020，Maven3.6，Java1.8，Nacos1.4.1，Goland2021，Golang1.20，Git
 
-   Java应用技术：Spring Boot2.7.11，Spring Cloud，Spring Cloud Alibaba，Nacos，Gateway，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)，Hutool，java-jwt
+   Java应用技术：Spring Boot2.7.11，Spring Cloud，Spring Cloud Alibaba，Nacos，Gateway，Mybatis，Lombok，Thymeleaf，nife4j-openapi2(swigger2)，Hutool，java-jwt，Lettuce
 
    Go使用技术：Gin，xorm，Redigo，一种采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
 
@@ -41,7 +41,7 @@
 
    小程序部分说明：由于我们使用Uniapp一站式开发，小程序随时可以打包，是否上线小程序还待考虑
 
-   说明：我们采用前后端分离的思想，并尽力消除[跨域时出现的问题](#其他说明)。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页端可视化的体验，另一致力于App和小程序的体验
+   说明：我们采用前后端分离的思想，并尽力消除[跨域时出现的问题](#其他说明)。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页上端可视化的体验，另一致力于App和小程序的体验
 
    项目中对应文件夹：frontend
 
