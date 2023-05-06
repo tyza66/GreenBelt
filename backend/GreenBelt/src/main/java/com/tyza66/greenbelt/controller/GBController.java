@@ -121,7 +121,7 @@ public class GBController {
     }
 
     @ApiOperation(value = "添加出水区间")
-    @GetMapping("/addgbareas")
+    @PostMapping("/addgbareas")
     public JSON addGBAreas(){
         return null;
     }
