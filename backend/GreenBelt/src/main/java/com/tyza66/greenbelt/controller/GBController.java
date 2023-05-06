@@ -3,6 +3,10 @@ package com.tyza66.greenbelt.controller;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.tyza66.greenbelt.entity.GBArea;
+import com.tyza66.greenbelt.entity.GBBars;
+import com.tyza66.greenbelt.mapper.GBAreaMapper;
+import com.tyza66.greenbelt.mapper.GBBarMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import redis.clients.jedis.Jedis;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Author: tyza66
@@ -28,6 +35,12 @@ public class GBController {
     @Autowired
     Jedis jedis;
 
+    @Resource
+    GBBarMapper gbBarsMapper;
+
+    @Resource
+    GBAreaMapper gbareaMapper;
+
     @ApiOperation(value = "刷新设备")
     @GetMapping("/flush/{address}")
     public JSON flush(@PathVariable String address) {
@@ -41,6 +54,7 @@ public class GBController {
     public JSON getWendu(@PathVariable String address){
         String s = jedis.get("Wendu_" + address);
         JSONObject wendu = JSONUtil.createObj();
+        //System.out.println(s);
         if(s == null){ //缓存击穿的情况
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
             JSONObject entries = JSONUtil.parseObj(jsonS);
@@ -56,6 +70,7 @@ public class GBController {
     @GetMapping("/getShidu/{address}")
     public JSON getShidu(@PathVariable String address){
         String s = jedis.get("Shidu_" + address);
+        System.out.println(s);
         JSONObject shidu = JSONUtil.createObj();
         if (s == null){
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
@@ -84,6 +99,18 @@ public class GBController {
         return liangdu;
     }
 
+    @ApiOperation(value = "获取物联网设备集群")
+    @GetMapping("/getgbs")
+    public JSON getGBBars(){
+        List<GBBars> allBars = gbBarsMapper.getAllBars();
+        return JSONUtil.parseArray(allBars);
+    }
 
+    @ApiOperation(value = "获取物联网设备集群设定自动区间")
+    @GetMapping("/getgbareas")
+    public JSON getGBAreas(){
+        List<GBArea> gbAreas = gbareaMapper.getGBAreas();
+        return JSONUtil.parseArray(gbAreas);
+    }
 }
 
