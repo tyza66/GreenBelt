@@ -17,7 +17,7 @@
           <el-tab-pane label="首页">
             <div class="sy">
               <div class="weather-continer">
-                <el-card class="box-card">
+                <el-card class="box-card hh">
                   <template #header>
                     <div class="card-header">
                       <span>'北京'今日天气</span>
@@ -35,8 +35,35 @@
                   <div>气压：{{ weather.pressure }}</div>
                 </el-card>
               </div>
+              <div class="driver-continer">
+                <el-card class="box-card hh">
+                  <template #header>
+                    <div class="card-header">
+                      <span>当前设备</span>
+                    </div>
+                  </template>
+                  <div class="driver">
+                    <img src="../assets/images/esp8266.webp" />
+                    <h4>{{ nowGbName + ":" + nowGbAddress }}</h4>
+                    <el-dropdown class="ed">
+                      <span class="el-dropdown-link">
+                        选择设备
+                        <el-icon class="el-icon--right">
+                          <arrow-down />
+                        </el-icon>
+                      </span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item>测试一号</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </div>
+                </el-card>
+              </div>
               <div id="main1" ref="chart1">
-
+              </div>
+              <div id="main2" ref="chart2">
               </div>
             </div>
           </el-tab-pane>
@@ -104,7 +131,7 @@
 }
 
 .sy {
-  width: 95%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -157,8 +184,72 @@
 #main1 {
   width: 500px;
   height: 300px;
-  background-color: antiquewhite;
+  background-color: rgba(255, 255, 255, 0.852);
   float: left;
+  margin-left: 50px;
+  border-radius: 5px;
+}
+
+.driver-continer {
+  width: 280px;
+  float: left;
+  margin-left: 50px;
+}
+
+.driver {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.driver img {
+  width: 150px;
+  height: 150px;
+  display: inline-block;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.ed {
+  align-self: center;
+}
+
+.el-icon {
+  top: 2px;
+  height: 1rem;
+}
+
+.el-dropdown-link {
+  height: 1.5rem;
+}
+
+.driver h4 {
+  line-height: 30px;
+  text-align: center;
+}
+
+.hh {
+  height: 300px;
+  ;
+}
+
+#main2 {
+  width: 500px;
+  height: 280px;
+  background-color: rgba(255, 255, 255, 0.852);
+  float: left;
+  margin-left: 50px;
+  border-radius: 5px;
+  margin-top: 15px;
 }
 </style>
 
@@ -176,6 +267,7 @@ import {
 import { LineChart } from 'echarts/charts';
 import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
+import { ArrowDown } from '@element-plus/icons-vue'
 echarts.use([
   TitleComponent,
   ToolboxComponent,
@@ -188,12 +280,21 @@ echarts.use([
 ]);
 export default {
   name: 'HomeView',
+  components: {
+    ArrowDown
+  },
   data() {
     return {
       weather: {},
       myChart1: {},
+      myChart2: {},
+      nowGbAddress: "192.168.100.106:80",
+      nowGbName: "测试一号",
       option1: {
-        color: ['#5470C6', '#EE6666'],
+        title: {
+          text: '温度监测'
+        },
+        color: ['#000000', '#5470C6'],
         tooltip: {
           trigger: 'none',
           axisPointer: {
@@ -221,7 +322,7 @@ export default {
               label: {
                 formatter: function (params) {
                   return (
-                    'Precipitation  ' +
+                    '温度传感器数值  ' +
                     params.value +
                     (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                   );
@@ -229,7 +330,7 @@ export default {
               }
             },
             // prettier-ignore
-            data: ['2016-1', '2016-2', '2016-3', '2016-4', '2016-5', '2016-6', '2016-7', '2016-8', '2016-9', '2016-10', '2016-11', '2016-12']
+            data: ['18秒前', '16秒前', '14秒前', '12秒前', '10秒前', '8秒前', '6秒前', '4秒前', '2秒前', '当前']
           },
           {
             type: 'category',
@@ -246,7 +347,7 @@ export default {
               label: {
                 formatter: function (params) {
                   return (
-                    'Precipitation  ' +
+                    '室外当前温度  ' +
                     params.value +
                     (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                   );
@@ -254,7 +355,7 @@ export default {
               }
             },
             // prettier-ignore
-            data: ['2015-1', '2015-2', '2015-3', '2015-4', '2015-5', '2015-6', '2015-7', '2015-8', '2015-9', '2015-10', '2015-11', '2015-12']
+            data: ['18秒前', '16秒前', '14秒前', '12秒前', '10秒前', '8秒前', '6秒前', '4秒前', '2秒前', '当前']
           }
         ],
         yAxis: [
@@ -264,7 +365,7 @@ export default {
         ],
         series: [
           {
-            name: 'Precipitation(2015)',
+            name: '室外当前温度',
             type: 'line',
             xAxisIndex: 1,
             smooth: true,
@@ -272,19 +373,38 @@ export default {
               focus: 'series'
             },
             data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             ]
           },
           {
-            name: 'Precipitation(2016)',
+            name: '温度传感器数值',
             type: 'line',
             smooth: true,
             emphasis: {
               focus: 'series'
             },
             data: [
-              3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             ]
+          }
+        ]
+      },
+      option2: {
+        title: {
+          text: '湿度监测'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['12秒前', '10秒前', '8秒前', '6秒前', '4秒前', '2秒前', '当前']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [0, 0, 0, 0, 0, 0, 0],
+            type: 'line',
+            smooth: true
           }
         ]
       }
@@ -324,6 +444,10 @@ export default {
       .then(function (response) {
         if (response.code == '200') {
           that.weather = response.daily[0]
+          var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
+          //console.log(a)
+          that.option1.series[0].data = [a, a, a, a, a, a, a, a, a, a]
+          //that.option1 && that.myChart1.setOption(that.option1);
           //console.log(that.weather)
         } else {
           ElMessage({
@@ -339,11 +463,112 @@ export default {
           type: 'warning',
         })
       });
+    request.get('http://192.168.100.103:8888/gb/getWendu/' + this.nowGbAddress)
+      .then(function (response) {
+        var a = response.Wendu
+        that.option1.series[1].data = [a, a, a, a, a, a, a, a, a, a]
+      })
+      .catch(function (error) {
+        console.log(error);
+        ElMessage({
+          message: '设备信息获取失败!',
+          type: 'warning',
+        })
+      });
+    setTimeout(function () {
+      request.get('http://192.168.100.103:8888/gb/getShidu/' + that.nowGbAddress)
+        .then(function (response) {
+          var b = response.Shidu
+          that.option2.series[0].data = [b,b,b,b,b,b,b]
+        })
+        .catch(function (error) {
+          console.log(error);
+          ElMessage({
+            message: '设备信息获取失败!',
+            type: 'warning',
+          })
+        });
+    }, 10)//玄学问题 千万不要动这个定时器 动了就有可能炸 但是不加定时器就会炸
+    /*
+      ***佛祖保佑 一直好使***
+////////////////////////////////////////////////////////////////////
+//                          _ooOoo_                               //
+//                         o8888888o                              //
+//                         88" . "88                              //
+//                         (| ^_^ |)                              //
+//                         O\  =  /O                              //
+//                      ____/`---'\____                           //
+//                    .'  \\|     |//  `.                         //
+//                   /  \\|||  :  |||//  \                        //
+//                  /  _||||| -:- |||||-  \                       //
+//                  |   | \\\  -  /// |   |                       //
+//                  | \_|  ''\---/''  |   |                       //
+//                  \  .-\__  `-`  ___/-. /                       //
+//                ___`. .'  /--.--\  `. . ___                     //
+//              ."" '<  `.___\_<|>_/___.'  >'"".                  //
+//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
+//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
+//      ========`-.____`-.___\_____/___.-`____.-'========         //
+//                           `=---='                              //
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
+//         佛祖保佑       永不触发BUG     永不修改                  //
+////////////////////////////////////////////////////////////////////
+    */
+
   },
   mounted() {
+    var that = this
     setTimeout(() => {
       this.myChart1 = echarts.init(this.$refs.chart1);
-      this.option1 && this.myChart1.setOption(this.option1);
+      that.option1 && that.myChart1.setOption(that.option1);
+      this.myChart2 = echarts.init(this.$refs.chart2);
+      that.option2 && that.myChart2.setOption(that.option2);
+
+      setInterval(function () {
+        that.option1 && that.myChart1.setOption(that.option1);
+        that.option2 && that.myChart2.setOption(that.option2);
+      }, 1000)
+      setInterval(function () {
+        request.get('http://192.168.100.103:8888/gb/getWendu/' + that.nowGbAddress)
+          .then(function (response) {
+            var a = response.Wendu
+            that.option1.series[1].data.shift()
+            that.option1.series[1].data.push(a)
+          })
+          .catch(function (error) {
+            console.log(error);
+            ElMessage({
+              message: '设备信息获取失败!',
+              type: 'warning',
+            })
+          });
+      }, 2000)
+      setInterval(function () {
+        request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
+          .then(function (response) {
+            if (response.code == '200') {
+              that.weather = response.daily[0]
+              var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
+              that.option1.series[0].data.shift()
+              //console.log(that.option1.series[0].data)
+              that.option1.series[0].data.push(a)
+              //console.log(that.option1.series[0].data)
+            } else {
+              ElMessage({
+                message: '天气信息获取失败!',
+                type: 'warning',
+              })
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+            ElMessage({
+              message: '天气信息获取失败!',
+              type: 'warning',
+            })
+          });
+        that.option1 && that.myChart1.setOption(that.option1);
+      }, 600000)
     }, 1)
   },
   methods: {

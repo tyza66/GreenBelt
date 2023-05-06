@@ -70,7 +70,6 @@ public class GBController {
     @GetMapping("/getShidu/{address}")
     public JSON getShidu(@PathVariable String address){
         String s = jedis.get("Shidu_" + address);
-        System.out.println(s);
         JSONObject shidu = JSONUtil.createObj();
         if (s == null){
             String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
