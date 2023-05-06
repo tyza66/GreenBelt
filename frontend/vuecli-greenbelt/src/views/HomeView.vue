@@ -54,7 +54,8 @@
                       </span>
                       <template #dropdown>
                         <el-dropdown-menu>
-                          <el-dropdown-item>测试一号</el-dropdown-item>
+                          <el-dropdown-item v-for="(one, i) in drivers" :key="i"
+                            @click="chooseDrive(i)">{{ one.name }}</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>
                     </el-dropdown>
@@ -62,6 +63,27 @@
                 </el-card>
               </div>
               <div id="main1" ref="chart1">
+              </div>
+              <div class="other-container">
+                <el-card class="box-card hh2">
+                  <template #header>
+                    <div class="card-header">
+                      <span>其他信息</span>
+                    </div>
+                  </template>
+                  <div>Green Belt</div>
+                  <div>版本：1.0</div>
+                </el-card>
+              </div>
+              <div class="light-container">
+                <el-card class="box-card hh2">
+                  <template #header>
+                    <div class="card-header">
+                      <span>亮度信息</span>
+                    </div>
+                  </template>
+                  <div>亮度传感器1：{{ light }}</div>
+                </el-card>
               </div>
               <div id="main2" ref="chart2">
               </div>
@@ -131,7 +153,7 @@
 }
 
 .sy {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -182,7 +204,7 @@
 }
 
 #main1 {
-  width: 500px;
+  width: 610px;
   height: 300px;
   background-color: rgba(255, 255, 255, 0.852);
   float: left;
@@ -239,16 +261,34 @@
 
 .hh {
   height: 300px;
-  ;
+}
+
+.hh2 {
+  height: 280px;
 }
 
 #main2 {
-  width: 500px;
+  width: 610px;
   height: 280px;
   background-color: rgba(255, 255, 255, 0.852);
   float: left;
-  margin-left: 50px;
   border-radius: 5px;
+  margin-top: 15px;
+  margin-left: 50px;
+}
+
+.other-container {
+  width: 280px;
+  height: 280px;
+  float: left;
+  margin-top: 15px;
+}
+
+.light-container {
+  width: 280px;
+  height: 280px;
+  float: left;
+  margin-left: 50px;
   margin-top: 15px;
 }
 </style>
@@ -288,8 +328,10 @@ export default {
       weather: {},
       myChart1: {},
       myChart2: {},
+      light: "无光照",
       nowGbAddress: "192.168.100.106:80",
       nowGbName: "测试一号",
+      drivers: [],
       option1: {
         title: {
           text: '温度监测'
@@ -514,7 +556,35 @@ export default {
 //         佛祖保佑       永不触发BUG     永不修改                  //
 ////////////////////////////////////////////////////////////////////
     */
-
+    request.get('http://192.168.100.103:8888/gb/getgbs')
+      .then(function (response) {
+        that.drivers = response
+        //console.log(response)
+        that.nowGbName = that.drivers[0].name
+        that.nowGbAddress = that.drivers[0].address
+      })
+      .catch(function (error) {
+        console.log(error);
+        ElMessage({
+          message: '设备列表获取失败!',
+          type: 'warning',
+        })
+      });
+    request.get('http://192.168.100.103:8888/gb/getLiangdu/' + that.nowGbAddress)
+      .then(function (response) {
+        if (response.Liangdu == "true") {
+          that.light = "有光照"
+        } else {
+          that.light = "无光照"
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        ElMessage({
+          message: '光照强度获取失败!',
+          type: 'warning',
+        })
+      });
   },
   mounted() {
     var that = this
@@ -557,6 +627,21 @@ export default {
               })
             });
         }, 10)
+        request.get('http://192.168.100.103:8888/gb/getLiangdu/' + that.nowGbAddress)
+          .then(function (response) {
+            if (response.Liangdu == "true") {
+              that.light = "有光照"
+            } else {
+              that.light = "无光照"
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+            ElMessage({
+              message: '光照强度获取失败!',
+              type: 'warning',
+            })
+          });
       }, 2000)
       setInterval(function () {
         request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
@@ -634,6 +719,9 @@ export default {
       else if (str2 == "d") {
         return str1 * 24 * 60 * 60 * 1000;
       }
+    }, chooseDrive(id) {
+      this.nowGbName = this.drivers[id].name
+      this.nowGbAddress = this.drivers[id].address
     }
   }
 }
