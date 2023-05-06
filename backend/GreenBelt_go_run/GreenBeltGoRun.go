@@ -48,8 +48,8 @@ func main() {
 	//定义阈值上下限的数据库对象结构体
 	type GBArea struct {
 		Address string
-		Min    string
-		Max   string
+		Min     string
+		Max     string
 	}
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
@@ -92,7 +92,7 @@ func main() {
 	//创建go程排队用的信道
 	Qch := make(chan int)
 	//创建go程
-	go readAll(drivers, redigo, Qch)
+	go readAll(drivers, redigo, areaMin, areaMax, Qch)
 	//启动go程递归循环启动种子
 	Qch <- 96
 
@@ -116,6 +116,23 @@ func main() {
 			redigo.Do("Set", "Liangdu_"+way, ld)
 		}
 		context.JSON(http.StatusOK, gin.H{"statu": "OK", "Wendu": wd, "Shidu": sd, "Liangdu": ld}) //返回json数据
+	})
+
+	//添加判定区间
+	ginServer.GET("/addArea", func(context *gin.Context) {
+		address := context.Query("address")
+		min := context.Query("min")
+		max := context.Query("max")
+		areaMin[address] = min
+		areaMax[address] = max
+		context.JSON(http.StatusOK, gin.H{"statu": "OK"}) //返回json数据
+	})
+
+	//添加搜索的地址
+	ginServer.GET("/addAddress", func(context *gin.Context) {
+		address := context.Query("address")
+		drivers.Push(address)
+		context.JSON(http.StatusOK, gin.H{"statu": "OK"}) //返回json数据
 	})
 
 	//启动gin服务在8070端口
@@ -174,11 +191,11 @@ func (q *GBQueue) Pop() (n string, err error) {
 }
 
 // 采用Java多线程底层队列思想和Go程信道特性制作的物联网硬件状态检查轮询机制
-//每两秒向缓存中更新当前设备传感的信息
-func readAll(q GBQueue, redigo redis.Conn, Qch chan int) {
+// 每两秒向缓存中更新当前设备传感的信息
+func readAll(q GBQueue, redigo redis.Conn, min map[string]string, max map[string]string, Qch chan int) {
 	var c = <-Qch
 	var one, _ = q.Pop()
-	if one != ""{
+	if one != "" {
 		//fmt.Println(one)
 		wd := getMsg("http://" + one + "/wd")
 		if wd != "" && wd != "404" {
@@ -197,6 +214,6 @@ func readAll(q GBQueue, redigo redis.Conn, Qch chan int) {
 		time.Sleep(2000 * time.Millisecond)
 		q.Push(one)
 	}
-	go readAll(q, redigo, Qch)
+	go readAll(q, redigo, min, max, Qch)
 	Qch <- c
 }
