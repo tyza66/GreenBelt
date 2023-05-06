@@ -7,6 +7,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 	"xorm.io/xorm"
 )
@@ -205,6 +206,19 @@ func readAll(q GBQueue, redigo redis.Conn, min map[string]string, max map[string
 		sd := getMsg("http://" + one + "/sd")
 		if sd != "" && wd != "404" {
 			redigo.Do("Set", "Shidu_"+one, sd)
+			if min[one] != "" && max[one] != "" {
+				sdNum, _ := strconv.ParseFloat(sd, 64)
+				minNum, _ := strconv.ParseFloat(min[one], 64)
+				maxNum, _ := strconv.ParseFloat(max[one], 64)
+				//湿度低于最低阈值开水
+				if sdNum < minNum {
+					getMsg("http://" + one + "/wo")
+				}
+				//湿度高于最高阈值关水
+				if sdNum > maxNum {
+					getMsg("http://" + one + "/wc")
+				}
+			}
 		}
 		//刷新缓存中的是否有光照
 		ld := getMsg("http://" + one + "/ld")
