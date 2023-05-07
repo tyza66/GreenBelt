@@ -141,13 +141,13 @@
         </el-tabs>
       </div>
     </div>
-    <el-dialog v-model="ADDdialogVisible" title="Tips" width="30%" :before-close="handleClose">
+    <el-dialog v-model="ADDdialogVisible" title="添加设备" width="30%" :before-close="handleClose">
       <span>This is a message</span>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="ADDdialogVisible = false">Cancel</el-button>
+          <el-button @click="ADDdialogVisible = false">取消</el-button>
           <el-button type="primary" @click="ADDdialogVisible = false">
-            Confirm
+            提交
           </el-button>
         </span>
       </template>
@@ -492,6 +492,7 @@ export default {
       nowMin: "10",
       nowMax: "20",
       drivers: [],
+      ADDdialogVisible:false,
       option1: {
         title: {
           text: '温度监测'
