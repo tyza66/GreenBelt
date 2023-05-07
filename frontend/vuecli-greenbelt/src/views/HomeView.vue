@@ -116,7 +116,20 @@
           <el-tab-pane label="设备管理">
             <div class="sbgl">
               <div class="control-bar">
-
+                <span class="s1">设备id</span>
+                <span class="s2">设备名称</span>
+                <span class="s3">设备地址</span>
+                <span class="s4">开关水阈值</span>
+                <span class="s5">操作</span>
+                <span class="s6"><el-button type="success" @click="addOne()">添加设备</el-button></span>
+              </div>
+              <div class="control-bar" v-for="(one, i) in drivers" :key="i">
+                <span class="s1">{{ one.id }}</span>
+                <span class="s2">{{ one.name }}</span>
+                <span class="s3">{{ one.address }}</span>
+                <span class="s4">{{ one.min + " " + one.max }}</span>
+                <span class="s7"><el-button type="primary">修改阈值</el-button><el-button
+                    type="danger">删除设备</el-button></span>
               </div>
             </div>
           </el-tab-pane>
@@ -128,6 +141,17 @@
         </el-tabs>
       </div>
     </div>
+    <el-dialog v-model="ADDdialogVisible" title="Tips" width="30%" :before-close="handleClose">
+      <span>This is a message</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="ADDdialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="ADDdialogVisible = false">
+            Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -378,6 +402,51 @@
   background: rgba(255, 255, 255, 0.652);
   border-radius: 5px;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.control-bar .s1 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s2 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s3 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s4 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s5 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s6 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar .s7 {
+  flex: 2;
+  line-height: 50px;
+  text-align: center;
 }
 </style>
 
@@ -396,6 +465,7 @@ import { LineChart } from 'echarts/charts';
 import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { ArrowDown } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
 echarts.use([
   TitleComponent,
   ToolboxComponent,
@@ -747,10 +817,11 @@ export default {
             })
           });
         for (var i = 0; i < that.drivers.length; i++) {
+          //防止因异步而串台
           var a = i
           request.get('http://192.168.100.103:8888/gb/getgbareasad/' + that.drivers[i].address)
             .then(function (response) {
-              console.log(a)
+              //console.log(a)
               that.drivers[a].min = response[0].min
               that.drivers[a].max = response[0].max
             })
@@ -842,6 +913,18 @@ export default {
     }, chooseDrive(id) {
       this.nowGbName = this.drivers[id].name
       this.nowGbAddress = this.drivers[id].address
+    },
+    handleClose(done)  {
+  ElMessageBox.confirm('Are you sure to close this dialog?')
+    .then(() => {
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
+},
+    addOne(){
+      this.ADDdialogVisible = true;
     }
   }
 }
