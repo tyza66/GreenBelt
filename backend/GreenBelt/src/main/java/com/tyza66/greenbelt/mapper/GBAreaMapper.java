@@ -15,6 +15,9 @@ public interface GBAreaMapper {
     @Select("select * from g_b_area")
     public List<GBArea> getGBAreas();
 
+    @Select("select * from g_b_area where address=#{add}")
+    public List<GBArea> getGBAByAdd(String add);
+
     @Update("INSERT INTO `GreenBelt`.`g_b_area` (`address`, `min`, `max`) VALUES (#{address}, #{min}, #{max})")
     public int addArea(String address,String min,String max);
 }

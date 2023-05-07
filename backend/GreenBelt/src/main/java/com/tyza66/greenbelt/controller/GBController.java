@@ -114,6 +114,13 @@ public class GBController {
         return JSONUtil.parseArray(gbAreas);
     }
 
+    @ApiOperation(value = "按地址获取物联网设备集群设定自动区间")
+    @GetMapping("/getgbareasad/{address}")
+    public JSON getGBAreasByAdd(@PathVariable String address){
+        List<GBArea> gbAreas = gbareaMapper.getGBAByAdd(address);
+        return JSONUtil.parseArray(gbAreas);
+    }
+
     @ApiOperation(value = "添加物联网设备")
     @PostMapping("/addgbs")
     public JSON addGBBars(){

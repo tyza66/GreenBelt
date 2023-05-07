@@ -54,8 +54,8 @@
                       </span>
                       <template #dropdown>
                         <el-dropdown-menu>
-                          <el-dropdown-item v-for="(one, i) in drivers" :key="i"
-                            @click="chooseDrive(i)">{{ one.name }}</el-dropdown-item>
+                          <el-dropdown-item v-for="(one, i) in drivers" :key="i" @click="chooseDrive(i)">{{ one.name
+                          }}</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>
                     </el-dropdown>
@@ -71,6 +71,8 @@
                       <span>其他信息</span>
                     </div>
                   </template>
+                  <div>自动浇水低阈值：{{ nowMin }}</div>
+                  <div>停止浇水高阈值：{{ nowMax }}</div>
                   <div>Green Belt</div>
                   <div>版本：1.0</div>
                 </el-card>
@@ -91,12 +93,31 @@
           </el-tab-pane>
           <el-tab-pane label="设备信息">
             <div class="sbxx">
-
+              <div class="info-bar">
+                <span class="s1">设备id</span>
+                <span class="s2">设备名称</span>
+                <apan class="s3">设备地址</apan>
+                <span class="s4">设备型号</span>
+                <span class="s6">设备组</span>
+                <span class="s7">出水低阈值</span>
+                <span class="s8">停水高阈值</span>
+              </div>
+              <div class="info-bar" v-for="(one, i) in drivers" :key="i">
+                <span class="s1">{{ one.id }}</span>
+                <span class="s2">{{ one.name }}</span>
+                <apan class="s3">{{ one.address }}</apan>
+                <span class="s4">ESP8266</span>
+                <span class="s6">{{ one.group }}</span>
+                <span class="s7">{{ one.min }}</span>
+                <span class="s8">{{ one.max }}</span>
+              </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="设备管理">
             <div class="sbgl">
+              <div class="control-bar">
 
+              </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="关于">
@@ -291,6 +312,73 @@
   margin-left: 50px;
   margin-top: 15px;
 }
+
+.info-bar {
+  width: 85%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.652);
+  border-radius: 5px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.info-bar .s1 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s2 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s3 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s4 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s5 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s6 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s7 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.info-bar .s8 {
+  flex: 1;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-bar {
+  width: 85%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.652);
+  border-radius: 5px;
+  margin: 0 auto;
+}
 </style>
 
 <script>
@@ -331,6 +419,8 @@ export default {
       light: "无光照",
       nowGbAddress: "192.168.100.106:80",
       nowGbName: "测试一号",
+      nowMin: "10",
+      nowMax: "20",
       drivers: [],
       option1: {
         title: {
@@ -562,6 +652,20 @@ export default {
         //console.log(response)
         that.nowGbName = that.drivers[0].name
         that.nowGbAddress = that.drivers[0].address
+        request.get('http://192.168.100.103:8888/gb/getgbareasad/' + that.nowGbAddress)
+          .then(function (response) {
+            that.nowMin = response[0].min
+            that.nowMax = response[0].max
+            that.drivers[0].min = response[0].min
+            that.drivers[0].max = response[0].max
+          })
+          .catch(function (error) {
+            console.log(error);
+            ElMessage({
+              message: '出水阈值获取失败!',
+              type: 'warning',
+            })
+          });
       })
       .catch(function (error) {
         console.log(error);
@@ -642,6 +746,22 @@ export default {
               type: 'warning',
             })
           });
+        for (var i = 0; i < that.drivers.length; i++) {
+          var a = i
+          request.get('http://192.168.100.103:8888/gb/getgbareasad/' + that.drivers[i].address)
+            .then(function (response) {
+              console.log(a)
+              that.drivers[a].min = response[0].min
+              that.drivers[a].max = response[0].max
+            })
+            .catch(function (error) {
+              console.log(error);
+              ElMessage({
+                message: '出水阈值获取失败!',
+                type: 'warning',
+              })
+            });
+        }
       }, 2000)
       setInterval(function () {
         request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
