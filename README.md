@@ -23,9 +23,9 @@
 
    <center>
    <figure>
-   <img src="./文档/图片/APP登录.jpg" width="300px" />
+   <img src="./文档/图片/APP登录.jpg" width="300px" alt="APP登录界面"/>
 
-   <img src="./文档/图片/APP管理.jpg" width="300px" />
+   <img src="./文档/图片/APP管理.jpg" width="300px" alt="APP管理界面"/>
    </figure>
    </center>
 4. #### 物联网设备面包板单机图
