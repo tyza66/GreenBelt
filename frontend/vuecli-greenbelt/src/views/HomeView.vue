@@ -73,6 +73,7 @@
                   </template>
                   <div>自动浇水低阈值：{{ nowMin }}</div>
                   <div>停止浇水高阈值：{{ nowMax }}</div>
+                  <div>是否在浇水:{{iswatering}}</div>
                   <div>Green Belt</div>
                   <div>版本：1.0</div>
                 </el-card>
@@ -511,6 +512,7 @@ export default {
       weather: {},
       myChart1: {},
       myChart2: {},
+      iswatering:"否",
       light: "无光照",
       nowGbAddress: "192.168.100.106:80",
       nowGbName: "测试一号",
@@ -819,6 +821,12 @@ export default {
               var b = response.Shidu
               that.option2.series[0].data.shift();
               that.option2.series[0].data.push(b);
+              if(b<that.nowMin){
+                that.iswatering ="是"
+              }
+              if(b>that.nowMax){
+                that.iswatering ="否"
+              }
             })
             .catch(function (error) {
               console.log(error);
