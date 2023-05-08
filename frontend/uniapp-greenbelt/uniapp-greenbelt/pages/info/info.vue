@@ -1,6 +1,14 @@
 <template>
 	<view>
 		<view class="top"></view>
+		<view>
+			<h2>温度：{{wd}}</h2>
+			<h2>湿度：{{sd}}</h2>
+			<h2>光照：{{ld}}</h2>
+			<h2>水泵：{{wt}}</h2>
+			<button class="button" type="primary" @click="ow()">开启水泵</button>
+			<button class="button" type="primary" @click="cw()">关闭水泵</button>
+		</view>
 	</view>
 </template>
 
@@ -64,7 +72,34 @@
 			});
 		},
 		methods: {
-
+			ow(){
+				var that = this
+				uni.request({
+					url: "http://" + this.address + '/wo',
+					method: 'GET',
+					success: (res) => {
+						//console.log(res.data);
+					},
+					fail: (res) => {
+						console.log(res.data);
+					}
+				});
+				that.wt = "开启"
+			},cw(){
+				var that = this
+				uni.request({
+					url: "http://" + this.address + '/wc',
+					method: 'GET',
+					success: (res) => {
+						//console.log(res.data);
+					},
+					fail: (res) => {
+						console.log(res.data);
+					}
+				});
+				that.wt = "关闭"
+			}
+			
 		}
 	}
 </script>
