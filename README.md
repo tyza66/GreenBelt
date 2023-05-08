@@ -15,6 +15,8 @@
 
    ![设备信息](./文档/图片/设备信息.png)
 
+   ![设备管理](./文档/图片/设备管理.png)
+
 3. #### APP/小程序界面
 
 4. #### 物联网设备面包板单机图
@@ -39,7 +41,7 @@
 
    Node前端应用技术：@vue/cliV，ue2.0，Elementui-Plus，Vuex，Vrouter，Axios，Echarts，uiverse.io，iconfont.cn，和风天气
 
-   网页部分说明：ElementuiPlus框架自带的响应式布局，会有Github Page和Gitee Page等演示界面
+   网页部分说明：ElementuiPlus框架自带的响应式布局，支持设备热插拔显示实时情况
 
    App部分说明：使用Uniapp可打包Android应用，iOS应用(需要加入App开发者联盟)等，我们演示项目只打包Android应用作为演示
 
