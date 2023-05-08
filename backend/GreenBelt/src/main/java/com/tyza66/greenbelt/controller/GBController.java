@@ -159,6 +159,7 @@ public class GBController {
         } else {
             obj.set("statu", "no");
         }
+        restTemplate.getForObject("http://localhost:96/addArea?address=" + gb.getAddress() + "&min=" + gb.getMin() + "&max=" + gb.getMax(), String.class);
         return obj;
     }
 
