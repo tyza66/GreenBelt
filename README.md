@@ -28,6 +28,14 @@
    <img src="./文档/图片/APP管理.jpg" width="300px" alt="APP管理界面"/>
    </figure>
    </center>
+
+   <center>
+   <figure>
+   <img src="./文档/图片/小程序登录.jpg" width="300px" alt="小程序登录界面"/>
+
+   <img src="./文档/图片/小程序管理.jpg" width="300px" alt="小程序管理界面"/>
+   </figure>
+   </center>
 4. #### 物联网设备面包板单机图
 
    #### ![面包板](./文档/图片/面包板.jpg)
