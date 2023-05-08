@@ -26,4 +26,9 @@ public interface GBAreaMapper {
     @Update("DELETE FROM `GreenBelt`.`g_b_area` WHERE `address` = #{add}")
     @Transactional
     int delArea(String add);
+
+    @Update("UPDATE `GreenBelt`.`g_b_area` SET `min` = #{min}, `max` = #{max} WHERE `address` = #{address}")
+    @Transactional
+    int update(GBArea gb);
+
 }

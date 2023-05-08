@@ -147,13 +147,28 @@ public class GBController {
         return obj;
     }
 
+    @ApiOperation(value = "修改出水区间")
+    @PostMapping("/updategbareas")
+    public JSON updateGBAreas(@RequestBody GBArea gb) {
+        int now = gbareaMapper.update(gb);
+        JSONObject obj = JSONUtil.createObj();
+        if (now >= 1) {
+            obj.set("statu", "ok");
+        } else {
+            obj.set("statu", "no");
+        }
+        return obj;
+    }
+
     @ApiOperation(value = "删除物联网设备")
     @PostMapping("/delgbs")
     public JSON delGBBars(@RequestBody GBBars gb) {
+        //System.out.println(gb.getId() + " " + gb.getAddress());
         int now = gbBarsMapper.deleteGbBars(gb.getId());
         int now2 = gbareaMapper.delArea(gb.getAddress());
+        //System.out.println(now + " " + now2);
         JSONObject obj = JSONUtil.createObj();
-        if (now >= 1 && now2 > 1) {
+        if (now >= 1 && now2 >= 1) {
             obj.set("statu", "ok");
         } else {
             obj.set("statu", "no");

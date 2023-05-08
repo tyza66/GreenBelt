@@ -128,8 +128,9 @@
                 <span class="s2">{{ one.name }}</span>
                 <span class="s3">{{ one.address }}</span>
                 <span class="s4">{{ one.min + " " + one.max }}</span>
-                <span class="s7"><el-button type="primary">修改阈值</el-button><el-button type="danger"
-                    @click="opdel()">删除设备</el-button></span>
+                <span class="s7"><el-button type="primary"
+                    @click="opwt(one.min, one.max, one.address)">修改阈值</el-button><el-button type="danger"
+                    @click="opdel(one.id, one.address)">删除设备</el-button></span>
               </div>
             </div>
           </el-tab-pane>
@@ -144,12 +145,24 @@
     <el-dialog v-model="ADDdialogVisible" title="添加设备" width="30%" :before-close="handleClose">
       <span>设备名称：<el-input v-model="input_name" placeholder="请输入" /></span>
       <span>设备地址：<el-input v-model="input_address" placeholder="请输入" /></span>
-      <span>湿度出水低阈值：<el-input v-model="input_min" placeholder="请输入" /></span>
-      <span>停止出水高阈值：<el-input v-model="input_max" placeholder="请输入" /></span>
+      <span>湿度出水低阈值：<el-input v-model="input_min" placeholder="请输入" type="number" /></span>
+      <span>停止出水高阈值：<el-input v-model="input_max" placeholder="请输入" type="number" /></span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="ADDdialogVisible = false">取消</el-button>
           <el-button type="primary" @click="updateOD()">
+            提交
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <el-dialog v-model="wtdialogVisible" title="修改出水阈值" width="30%" :before-close="handleClose">
+      <span>湿度出水低阈值：<el-input v-model="now_input_min" placeholder="请输入" type="number" /></span>
+      <span>停止出水高阈值：<el-input v-model="now_input_max" placeholder="请输入" type="number" /></span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="wtdialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="updateAR()">
             提交
           </el-button>
         </span>
@@ -490,6 +503,9 @@ export default {
       input_address: "",
       input_min: "",
       input_max: "",
+      now_input_min: "",
+      now_input_max: "",
+      now_edit_address: "",
       weather: {},
       myChart1: {},
       myChart2: {},
@@ -500,6 +516,7 @@ export default {
       nowMax: "20",
       drivers: [],
       ADDdialogVisible: false,
+      wtdialogVisible: false,
       option1: {
         title: {
           text: '温度监测'
@@ -1012,6 +1029,7 @@ export default {
         });
       this.ADDdialogVisible = false
     }, opdel(id, add) {
+      var that = this;
       ElMessageBox.confirm(
         '您是否确定要删除此设备?',
         '提示',
@@ -1030,8 +1048,19 @@ export default {
               if (response.statu == "ok") {
                 ElMessage({
                   message: '删除设备成功!',
-                  type: 'warning',
+                  type: 'success',
                 })
+                request.get('http://192.168.100.103:8888/gb/getgbs')
+                  .then(function (response) {
+                    that.drivers = response
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    ElMessage({
+                      message: '设备列表获取失败!',
+                      type: 'warning',
+                    })
+                  });
               }
               if (response.statu == "no") {
                 ElMessage({
@@ -1054,6 +1083,39 @@ export default {
             message: '取消删除',
           })
         })
+    }, opwt(min, max, address) {
+      this.now_input_min = min
+      this.now_input_max = max
+      this.now_edit_address = address
+      this.wtdialogVisible = true;
+    }, updateAR() {
+      request.post('http://192.168.100.103:8888/gb/updategbareas', {
+        address: this.now_edit_address,
+        min: this.now_input_min,
+        max: this.now_input_max
+      })
+        .then(function (response) {
+          if(response.statu=='ok'){
+            ElMessage({
+                message: '修改区间成功!',
+                type: 'success',
+              })
+          }
+          if(response.statu=='no'){
+            ElMessage({
+                message: '输入信息有误,修改失败!',
+                type: 'warning',
+              })
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          ElMessage({
+                message: '修改区间错误!',
+                type: 'warning',
+              })
+        });
+        this.wtdialogVisible = false;
     }
   }
 }
