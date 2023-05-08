@@ -2,25 +2,18 @@
 	<view>
 		<view class="top"></view>
 		<view>
-			<div class="popup">
-			  <form class="form">
-			    <div class="icon">
-			      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 34 34" height="34" width="34">
-			        <path stroke-linejoin="round" stroke-width="2.5" stroke="#115DFC" d="M7.08385 9.91666L5.3572 11.0677C4.11945 11.8929 3.50056 12.3055 3.16517 12.9347C2.82977 13.564 2.83226 14.3035 2.83722 15.7825C2.84322 17.5631 2.85976 19.3774 2.90559 21.2133C3.01431 25.569 3.06868 27.7468 4.67008 29.3482C6.27148 30.9498 8.47873 31.0049 12.8932 31.1152C15.6396 31.1838 18.3616 31.1838 21.1078 31.1152C25.5224 31.0049 27.7296 30.9498 29.331 29.3482C30.9324 27.7468 30.9868 25.569 31.0954 21.2133C31.1413 19.3774 31.1578 17.5631 31.1639 15.7825C31.1688 14.3035 31.1712 13.564 30.8359 12.9347C30.5004 12.3055 29.8816 11.8929 28.6437 11.0677L26.9171 9.91666"></path>
-			        <path stroke-linejoin="round" stroke-width="2.5" stroke="#115DFC" d="M2.83331 14.1667L12.6268 20.0427C14.7574 21.3211 15.8227 21.9603 17 21.9603C18.1772 21.9603 19.2426 21.3211 21.3732 20.0427L31.1666 14.1667"></path>
-			        <path stroke-width="2.5" stroke="#115DFC" d="M7.08331 17V8.50001C7.08331 5.82872 7.08331 4.49307 7.91318 3.66321C8.74304 2.83334 10.0787 2.83334 12.75 2.83334H21.25C23.9212 2.83334 25.2569 2.83334 26.0868 3.66321C26.9166 4.49307 26.9166 5.82872 26.9166 8.50001V17"></path>
-			        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="#115DFC" d="M14.1667 14.1667H19.8334M14.1667 8.5H19.8334"></path>
-			      </svg>
-			    </div>
-			    <div class="note">
-			      <label class="title">Subscribe for updates</label>
-			      <span class="subtitle">Subscribe to this weekly news letter so you don’t miss out
-			on the new hot tech topics.</span>
-			    </div>
-			    <input placeholder="Enter your e-mail" title="Enter your e-mail" name="email" type="email" class="input_field">
-			    <button class="submit">Submit</button>
-			  </form>
-			</div>
+			<form action="" class="form">
+				<div class="Group">
+					<label for="Password">设备地址</label>
+					<input id="Password" type="text">
+				</div>
+				<div class="Group">
+					<button class="btn">登录</button>
+				</div>
+			</form>
+			<h3>Green Belt</h3>
+			<h5>基于大数据和物联网的可视化城市绿化带自动灌溉系统</h5>
+			<h4>开源地址：https://github.com/tyza66/GreenBelt</h4>
 		</view>
 	</view>
 </template>
@@ -29,109 +22,107 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		onLoad() {
 
 		},
-		methods: {
-		}
+		methods: {}
 	}
 </script>
 
 <style>
 	.top {
-			height: var(--status-bar-height);
-			width: 100%;
-			background-color: #FFFFFF;
-		}
-	.popup {
-	  position: relative;
-	  width: 320px;
-	  height: fit-content;
-	  background: #FFFFFF;
-	  box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01), 0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09), 0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-	  border-radius: 13px;
+		height: var(--status-bar-height);
+		width: 100%;
+		background-color: #FFFFFF;
 	}
-	
+
 	.form {
-	  display: flex;
-	  flex-direction: column;
-	  align-items: flex-start;
-	  padding: 20px;
-	  gap: 20px;
+		display: flex;
+		flex-direction: column;
+		width: 700rpx;
+		height: 280px;
+		background-color: #FFF;
+		margin: 0;
+		/*box-shadow: -1px 0px 25px 0px #21719369;*/
+		padding: 2.25em;
+		box-sizing: border-box;
+		/*border: solid 1px #DDD;
+	  border-radius: 0.5em;*/
+		font-family: sans-serif;
+		font-size: 16px;
+		font-weight: 400;
+		margin: 0 auto;
+		margin-top: 100rpx;
 	}
-	
-	.icon {
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
-	  width: 60px;
-	  height: 60px;
-	  background: #ECF1FD;
-	  box-shadow: 0px 0.5px 0.5px #EFEFEF, 0px 1px 0.5px rgba(239, 239, 239, 0.5);
-	  border-radius: 5px;
+
+	.form .Group {
+		margin-bottom: 2em;
 	}
-	
-	.note {
-	  display: flex;
-	  flex-direction: column;
-	  gap: 8px;
+
+	.form label {
+		margin: 0 0 10px;
+		display: block;
+		font-size: 1.25em;
+		color: #217093;
+		font-weight: 600;
+		font-family: inherit;
 	}
-	
-	.title {
-	  font-style: normal;
-	  font-weight: 700;
-	  font-size: 17px;
-	  line-height: 24px;
-	  color: #2B2B2F;
+
+	.form input {
+		padding: 0.3em 0.5em 0.4em;
+		background-color: #f3fafd;
+		border: solid 2px #217093;
+		border-radius: 4px;
+		box-sizing: border-box;
+		width: 100%;
+		height: 50px;
+		font-size: 1.3em;
+		color: #353538;
+		font-weight: 600;
+		font-family: inherit;
+		transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
 	}
-	
-	.subtitle {
-	  font-style: normal;
-	  font-weight: 600;
-	  font-size: 13px;
-	  line-height: 18px;
-	  color: #5F5D6B;
+
+	.form input:focus {
+		outline: none;
+		box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+		background-color: #edf8fc;
+		border: solid 2px #4eb8dd;
 	}
-	
-	.input_field {
-	  width: 100%;
-	  height: 42px;
-	  padding: 0 0 0 12px;
-	  border-radius: 5px;
-	  outline: none;
-	  border: 1px solid #e5e5e5;
-	  filter: drop-shadow(0px 1px 0px #efefef)
-	    drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
-	  transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+
+	.form input::placeholder {
+		color: #21719383;
 	}
-	
-	.input_field:focus {
-	  border: 1px solid transparent;
-	  box-shadow: 0px 0px 0px 1px #2B2B2F;
-	  background-color: transparent;
+
+	.form .btn {
+		margin: 0;
+		padding: 0.5em;
+		background-color: #4eb8dd;
+		border: none;
+		border-radius: 4px;
+		box-sizing: border-box;
+		box-shadow: none;
+		width: 100%;
+		height: 80px;
+		font-size: 1.4em;
+		color: #FFF;
+		font-weight: 600;
+		font-family: inherit;
+		transition: transforme 0.1s ease-in-out, background-color 0.2s ease-out;
 	}
-	
-	.form button.submit {
-	  display: flex;
-	  flex-direction: row;
-	  justify-content: center;
-	  align-items: center;
-	  padding: 10px 18px;
-	  gap: 10px;
-	  width: 100%;
-	  height: 42px;
-	  background: linear-gradient(180deg, #4480FF 0%, #115DFC 50%, #0550ED 100%);
-	  box-shadow: 0px 0.5px 0.5px #EFEFEF, 0px 1px 0.5px rgba(239, 239, 239, 0.5);
-	  border-radius: 5px;
-	  border: 0;
-	  font-style: normal;
-	  font-weight: 600;
-	  font-size: 12px;
-	  line-height: 15px;
-	  color: #ffffff;
+
+	.form .btn:hover {
+		cursor: pointer;
+		background-color: #217093;
 	}
-	    	
+
+	.form .btn:active {
+		transform: scale(0.98);
+	}
+	h3,h4,h5{
+		text-align: center;
+	}
 </style>
