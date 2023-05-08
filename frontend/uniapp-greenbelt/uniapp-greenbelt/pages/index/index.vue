@@ -5,10 +5,10 @@
 			<form action="" class="form">
 				<div class="Group">
 					<label for="Password">设备地址</label>
-					<input id="Password" type="text">
+					<input v-model="address" type="text" />
 				</div>
 				<div class="Group">
-					<button class="btn">登录</button>
+					<button class="btn" @click="go()">登录</button>
 				</div>
 			</form>
 			<h3>Green Belt</h3>
@@ -22,13 +22,19 @@
 	export default {
 		data() {
 			return {
-
+				address: ''
 			}
 		},
 		onLoad() {
 
 		},
-		methods: {}
+		methods: {
+			go() {
+				uni.navigateTo({
+					url: '../info/info?address=' + this.address
+				});
+			}
+		}
 	}
 </script>
 
@@ -122,7 +128,10 @@
 	.form .btn:active {
 		transform: scale(0.98);
 	}
-	h3,h4,h5{
+
+	h3,
+	h4,
+	h5 {
 		text-align: center;
 	}
 </style>

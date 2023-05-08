@@ -2,6 +2,7 @@
 	<view>
 		<view class="top"></view>
 		<view>
+			<h2>地址：{{address}}</h2>
 			<h2>温度：{{wd}}</h2>
 			<h2>湿度：{{sd}}</h2>
 			<h2>光照：{{ld}}</h2>
@@ -22,6 +23,8 @@
 				ld: '0',
 				wt: '关闭'
 			}
+		},onLoad(option) {
+			this.address = option.address
 		},
 		created() {
 			var that = this
