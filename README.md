@@ -20,14 +20,14 @@
    ![设备管理](./文档/图片/设备管理.png)
 
 3. #### APP/小程序界面
-4. <center>
+
+   <center>
    <figure>
    <img src="./文档/图片/APP登录.jpg" width="300px" />
 
    <img src="./文档/图片/APP管理.jpg" width="300px" />
    </figure>
    </center>
-
 4. #### 物联网设备面包板单机图
 
    #### ![面包板](./文档/图片/面包板.jpg)
