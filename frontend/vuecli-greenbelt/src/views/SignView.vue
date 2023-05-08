@@ -306,7 +306,7 @@ export default {
             account: "",
             password: "",
             mqcr: "",
-            qcr: "http://192.168.100.103:9090/user/qcr"
+            qcr: "http://192.168.100.103:9090/userl/qcr"
         }
     },
     created() {
@@ -315,11 +315,11 @@ export default {
     methods: {
         reqcr() {
             var timestamp = new Date().getTime();
-            this.qcr = "http://192.168.100.103:9090/user/qcr?t=" + timestamp
+            this.qcr = "http://192.168.100.103:9090/userl/qcr?t=" + timestamp
         },
         sign() {
             var that = this
-            request.post('http://192.168.100.103:8888/user/sign', {
+            request.post('http://192.168.100.103:8888/userl/sign', {
                 "account": this.account,
                 "id": 0,
                 "nickname": this.mqcr,

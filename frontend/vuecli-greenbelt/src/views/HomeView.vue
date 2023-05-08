@@ -142,11 +142,14 @@
       </div>
     </div>
     <el-dialog v-model="ADDdialogVisible" title="添加设备" width="30%" :before-close="handleClose">
-      <span>This is a message</span>
+      <span>设备名称：<el-input v-model="input_name" placeholder="请输入" /></span>
+      <span>设备地址：<el-input v-model="input_address" placeholder="请输入" /></span>
+      <span>湿度出水低阈值：<el-input v-model="input_min" placeholder="请输入" /></span>
+      <span>停止出水高阈值：<el-input v-model="input_max" placeholder="请输入" /></span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="ADDdialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="ADDdialogVisible = false">
+          <el-button type="primary" @click="updateOD()">
             提交
           </el-button>
         </span>
@@ -483,6 +486,10 @@ export default {
   },
   data() {
     return {
+      input_name: "",
+      input_address: "",
+      input_min: "",
+      input_max: "",
       weather: {},
       myChart1: {},
       myChart2: {},
@@ -492,7 +499,7 @@ export default {
       nowMin: "10",
       nowMax: "20",
       drivers: [],
-      ADDdialogVisible:false,
+      ADDdialogVisible: false,
       option1: {
         title: {
           text: '温度监测'
@@ -817,116 +824,194 @@ export default {
               type: 'warning',
             })
           });
-        for (var i = 0; i < that.drivers.length; i++) {
-          //防止因异步而串台
-          var a = i
-          request.get('http://192.168.100.103:8888/gb/getgbareasad/' + that.drivers[i].address)
-            .then(function (response) {
-              //console.log(a)
-              that.drivers[a].min = response[0].min
-              that.drivers[a].max = response[0].max
-            })
-            .catch(function (error) {
-              console.log(error);
-              ElMessage({
-                message: '出水阈值获取失败!',
-                type: 'warning',
-              })
-            });
+        let promiseList = []
+        for (let i = 0; i < that.drivers.length; i++) {
+          //promiseList这里要放到push数组里，原因是  如果用变量。一直就是最后一个， 或者不用push的话 ，也可以用闭包的形式来
+          promiseList.push(new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(i)//如果想要返回多个数据resolve([v,i])
+            }, Math.random() * 3000);
+          }));
         }
-      }, 2000)
-      setInterval(function () {
-        request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
-          .then(function (response) {
-            if (response.code == '200') {
-              that.weather = response.daily[0]
-              var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
-              that.option1.series[0].data.shift()
-              //console.log(that.option1.series[0].data)
-              that.option1.series[0].data.push(a)
-              //console.log(that.option1.series[0].data)
-            } else {
-              ElMessage({
-                message: '天气信息获取失败!',
-                type: 'warning',
+        //放到循环外边  因为 rspList是一个数组
+        Promise.all(promiseList).then((rspList) => {
+          rspList.map((val) => {
+            //防止因异步而串台
+            var a = val
+            request.get('http://192.168.100.103:8888/gb/getgbareasad/' + that.drivers[val].address)
+              .then(function (response) {
+                //console.log(a)
+                that.drivers[a].min = response[0].min,
+                that.drivers[a].max = response[0].max
               })
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
+              .catch(function (error) {
+                console.log(error);
+                ElMessage({
+                  message: '出水阈值获取失败!',
+                  type: 'warning',
+                })
+              });
+          });
+      });
+    }, 2000)
+    setInterval(function () {
+      request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
+        .then(function (response) {
+          if (response.code == '200') {
+            that.weather = response.daily[0]
+            var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
+            that.option1.series[0].data.shift()
+            //console.log(that.option1.series[0].data)
+            that.option1.series[0].data.push(a)
+            //console.log(that.option1.series[0].data)
+          } else {
             ElMessage({
               message: '天气信息获取失败!',
               type: 'warning',
             })
-          });
-        that.option1 && that.myChart1.setOption(that.option1);
-      }, 600000)
-    }, 1)
-  },
-  methods: {
-    addcookie(name, value, time) {
-      var strSec = this.getSec(time);
-      var exp = new Date();
-      exp.setTime(exp.getTime() + strSec * 1);
-      //设置cookie的名称、值、失效时间
-      document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
-    },
-    getCookie(name) {
-      //获取当前所有cookie
-      var strCookies = document.cookie;
-      //截取变成cookie数组
-      var array = strCookies.split(';');
-      //循环每个cookie
-      for (var i = 0; i < array.length; i++) {
-        //将cookie截取成两部分
-        var item = array[i].split("=");
-        //判断cookie的name 是否相等
-        if (item[0] == name) {
-          return item[1];
-        }
-      }
-      return null;
-    },
-    delCookie(name) {
-      var exp = new Date();
-      exp.setTime(exp.getTime() - 1);
-      //获取cookie是否存在
-      var value = this.getCookie(name);
-      if (value != null) {
-        document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
-      }
-    },
-    getSec(str) {
-      var str1 = str.substr(0, str.length - 1);  //时间数值 
-      var str2 = str.substr(str.length - 1, 1);    //时间单位
-      if (str2 == "s") {
-        return str1 * 1000;
-      }
-      else if (str2 == "m") {
-        return str1 * 60 * 1000;
-      }
-      else if (str2 == "h") {
-        return str1 * 60 * 60 * 1000;
-      }
-      else if (str2 == "d") {
-        return str1 * 24 * 60 * 60 * 1000;
-      }
-    }, chooseDrive(id) {
-      this.nowGbName = this.drivers[id].name
-      this.nowGbAddress = this.drivers[id].address
-    },
-    handleClose(done)  {
-  ElMessageBox.confirm('Are you sure to close this dialog?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          ElMessage({
+            message: '天气信息获取失败!',
+            type: 'warning',
+          })
+        });
+      that.option1 && that.myChart1.setOption(that.option1);
+    }, 600000)
+  }, 1)
 },
-    addOne(){
-      this.ADDdialogVisible = true;
+methods: {
+  addcookie(name, value, time) {
+    var strSec = this.getSec(time);
+    var exp = new Date();
+    exp.setTime(exp.getTime() + strSec * 1);
+    //设置cookie的名称、值、失效时间
+    document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
+  },
+  getCookie(name) {
+    //获取当前所有cookie
+    var strCookies = document.cookie;
+    //截取变成cookie数组
+    var array = strCookies.split(';');
+    //循环每个cookie
+    for (var i = 0; i < array.length; i++) {
+      //将cookie截取成两部分
+      var item = array[i].split("=");
+      //判断cookie的name 是否相等
+      if (item[0] == name) {
+        return item[1];
+      }
     }
+    return null;
+  },
+  delCookie(name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    //获取cookie是否存在
+    var value = this.getCookie(name);
+    if (value != null) {
+      document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
+    }
+  },
+  getSec(str) {
+    var str1 = str.substr(0, str.length - 1);  //时间数值 
+    var str2 = str.substr(str.length - 1, 1);    //时间单位
+    if (str2 == "s") {
+      return str1 * 1000;
+    }
+    else if (str2 == "m") {
+      return str1 * 60 * 1000;
+    }
+    else if (str2 == "h") {
+      return str1 * 60 * 60 * 1000;
+    }
+    else if (str2 == "d") {
+      return str1 * 24 * 60 * 60 * 1000;
+    }
+  }, chooseDrive(id) {
+    this.nowGbName = this.drivers[id].name
+    this.nowGbAddress = this.drivers[id].address
+  },
+  handleClose(done) {
+    ElMessageBox.confirm('确定要关闭窗口吗?您填写的信息将会丢失!')
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
+  },
+  addOne() {
+    this.input_name = ""
+    this.input_address = ""
+    this.input_min = ""
+    this.input_max = ""
+    this.ADDdialogVisible = true;
+  },
+  updateOD() {
+    var that = this
+    request.post('http://192.168.100.103:8888/gb/addgbs', {
+      address: that.input_address,
+      name: that.input_name
+    })
+      .then(function (response) {
+        //console.log(response);
+        if (response.statu == 'ok') {
+          request.post('http://192.168.100.103:8888/gb/addgbareas', {
+            address: that.input_address,
+            min: that.input_min,
+            max: that.input_max
+          })
+            .then(function (response) {
+              //console.log(response);
+              if (response.statu == 'ok') {
+                ElMessage({
+                  message: '添加成功!',
+                  type: 'success',
+                })
+                request.get('http://192.168.100.103:8888/gb/getgbs')
+                  .then(function (response) {
+                    that.drivers = response
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    ElMessage({
+                      message: '设备列表获取失败!',
+                      type: 'warning',
+                    })
+                  });
+              } if (response.statu == 'no') {
+                ElMessage({
+                  message: '您输入的信息有误，添加失败!',
+                  type: 'warning',
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+              ElMessage({
+                message: '添加出水区间失败!',
+                type: 'warning',
+              })
+            });
+        } if (response.statu == 'no') {
+          ElMessage({
+            message: '您输入的信息有误，添加失败!',
+            type: 'warning',
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        ElMessage({
+          message: '添加设备失败!',
+          type: 'warning',
+        })
+      });
+    this.ADDdialogVisible = false
   }
+}
 }
 </script>

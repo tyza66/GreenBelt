@@ -3,6 +3,7 @@ package com.tyza66.greenbelt.mapper;
 import com.tyza66.greenbelt.entity.GBArea;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,5 +20,10 @@ public interface GBAreaMapper {
     public List<GBArea> getGBAByAdd(String add);
 
     @Update("INSERT INTO `GreenBelt`.`g_b_area` (`address`, `min`, `max`) VALUES (#{address}, #{min}, #{max})")
+    @Transactional
     public int addArea(String address,String min,String max);
+
+    @Update("DELETE FROM `GreenBelt`.`g_b_area` WHERE `address` = #{add}")
+    @Transactional
+    int delArea(String add);
 }

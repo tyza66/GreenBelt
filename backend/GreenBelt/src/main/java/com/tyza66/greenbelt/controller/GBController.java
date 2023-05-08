@@ -123,14 +123,41 @@ public class GBController {
 
     @ApiOperation(value = "添加物联网设备")
     @PostMapping("/addgbs")
-    public JSON addGBBars(){
-        return null;
+    public JSON addGBBars(@RequestBody GBBars gb){
+        int now = gbBarsMapper.addGbBars(gb.getAddress(),gb.getName());
+        JSONObject obj = JSONUtil.createObj();
+        if(now>=1){
+            obj.set("statu","ok");
+        }else{
+            obj.set("statu","no");
+        }
+        return obj;
     }
 
     @ApiOperation(value = "添加出水区间")
     @PostMapping("/addgbareas")
-    public JSON addGBAreas(){
-        return null;
+    public JSON addGBAreas(@RequestBody GBArea gb){
+        int now = gbareaMapper.addArea(gb.getAddress(),gb.getMin(),gb.getMax());
+        JSONObject obj = JSONUtil.createObj();
+        if(now>=1){
+            obj.set("statu","ok");
+        }else{
+            obj.set("statu","no");
+        }
+        return obj;
+    }
+
+    @ApiOperation(value = "删除物联网设备")
+    @PostMapping("/delgbs")
+    public JSON delGBBars(@RequestBody GBBars gb){
+        int now = gbBarsMapper.deleteGbBars(gb.getId());
+        JSONObject obj = JSONUtil.createObj();
+        if(now>=1){
+            obj.set("statu","ok");
+        }else{
+            obj.set("statu","no");
+        }
+        return obj;
     }
 }
 

@@ -15,4 +15,8 @@ public interface GBBarMapper {
     @Update("INSERT INTO `GreenBelt`.`g_b_bars` (`address`, `name`, `group`) VALUES (#{address}, #{name}, 1)")
     @Transactional
     int addGbBars(String address, String name);
+
+    @Update("DELETE FROM `GreenBelt`.`g_b_bars` WHERE `id` = #{id}")
+    @Transactional
+    int deleteGbBars(int id);
 }
