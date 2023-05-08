@@ -42,25 +42,25 @@ public class GBController {
     @ApiOperation(value = "刷新设备")
     @GetMapping("/flush/{address}")
     public JSON flush(@PathVariable String address) {
-        String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
+        String jsonS = restTemplate.getForObject("http://localhost:96/flush/" + address, String.class);
         JSONObject entries = JSONUtil.parseObj(jsonS);
         return entries;
     }
 
     @ApiOperation(value = "获取指定设备温度")
     @GetMapping("/getWendu/{address}")
-    public JSON getWendu(@PathVariable String address){
+    public JSON getWendu(@PathVariable String address) {
         ValueOperations ops = redisTemplate.opsForValue();
-        String s = (String)ops.get("Wendu_" + address);
+        String s = (String) ops.get("Wendu_" + address);
         //System.out.println(s);
         JSONObject wendu = JSONUtil.createObj();
         //System.out.println(s);
-        if(s == null){ //缓存击穿的情况
-            String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
+        if (s == null) { //缓存击穿的情况
+            String jsonS = restTemplate.getForObject("http://localhost:96/flush/" + address, String.class);
             JSONObject entries = JSONUtil.parseObj(jsonS);
             Object wendu1 = entries.get("Wendu");
             wendu.set("Wendu", wendu1);
-        }else{
+        } else {
             wendu.set("Wendu", s);
         }
         return wendu;
@@ -68,16 +68,16 @@ public class GBController {
 
     @ApiOperation(value = "获取指定设备湿度")
     @GetMapping("/getShidu/{address}")
-    public JSON getShidu(@PathVariable String address){
+    public JSON getShidu(@PathVariable String address) {
         ValueOperations ops = redisTemplate.opsForValue();
         String s = (String) ops.get("Shidu_" + address);
         JSONObject shidu = JSONUtil.createObj();
-        if (s == null){
-            String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
+        if (s == null) {
+            String jsonS = restTemplate.getForObject("http://localhost:96/flush/" + address, String.class);
             JSONObject entries = JSONUtil.parseObj(jsonS);
             Object shidu1 = entries.get("Shidu");
             shidu.set("Shidu", shidu1);
-        }else{
+        } else {
             shidu.set("Shidu", s);
         }
         return shidu;
@@ -85,16 +85,16 @@ public class GBController {
 
     @ApiOperation(value = "获取指定设备亮度")
     @GetMapping("/getLiangdu/{address}")
-    public JSON getiangdu(@PathVariable String address){
+    public JSON getiangdu(@PathVariable String address) {
         ValueOperations ops = redisTemplate.opsForValue();
-        String s = (String)ops.get("Liangdu_" + address);
+        String s = (String) ops.get("Liangdu_" + address);
         JSONObject liangdu = JSONUtil.createObj();
-        if (s == null){
-            String jsonS = restTemplate.getForObject("http://localhost:96/flush/"+address,String.class);
+        if (s == null) {
+            String jsonS = restTemplate.getForObject("http://localhost:96/flush/" + address, String.class);
             JSONObject entries = JSONUtil.parseObj(jsonS);
             Object liangdu1 = entries.get("Liangdu");
             liangdu.set("Liangdu", liangdu1);
-        }else {
+        } else {
             liangdu.set("Liangdu", s);
         }
         return liangdu;
@@ -102,60 +102,61 @@ public class GBController {
 
     @ApiOperation(value = "获取物联网设备集群")
     @GetMapping("/getgbs")
-    public JSON getGBBars(){
+    public JSON getGBBars() {
         List<GBBars> allBars = gbBarsMapper.getAllBars();
         return JSONUtil.parseArray(allBars);
     }
 
     @ApiOperation(value = "获取物联网设备集群设定自动区间")
     @GetMapping("/getgbareas")
-    public JSON getGBAreas(){
+    public JSON getGBAreas() {
         List<GBArea> gbAreas = gbareaMapper.getGBAreas();
         return JSONUtil.parseArray(gbAreas);
     }
 
     @ApiOperation(value = "按地址获取物联网设备集群设定自动区间")
     @GetMapping("/getgbareasad/{address}")
-    public JSON getGBAreasByAdd(@PathVariable String address){
+    public JSON getGBAreasByAdd(@PathVariable String address) {
         List<GBArea> gbAreas = gbareaMapper.getGBAByAdd(address);
         return JSONUtil.parseArray(gbAreas);
     }
 
     @ApiOperation(value = "添加物联网设备")
     @PostMapping("/addgbs")
-    public JSON addGBBars(@RequestBody GBBars gb){
-        int now = gbBarsMapper.addGbBars(gb.getAddress(),gb.getName());
+    public JSON addGBBars(@RequestBody GBBars gb) {
+        int now = gbBarsMapper.addGbBars(gb.getAddress(), gb.getName());
         JSONObject obj = JSONUtil.createObj();
-        if(now>=1){
-            obj.set("statu","ok");
-        }else{
-            obj.set("statu","no");
+        if (now >= 1) {
+            obj.set("statu", "ok");
+        } else {
+            obj.set("statu", "no");
         }
         return obj;
     }
 
     @ApiOperation(value = "添加出水区间")
     @PostMapping("/addgbareas")
-    public JSON addGBAreas(@RequestBody GBArea gb){
-        int now = gbareaMapper.addArea(gb.getAddress(),gb.getMin(),gb.getMax());
+    public JSON addGBAreas(@RequestBody GBArea gb) {
+        int now = gbareaMapper.addArea(gb.getAddress(), gb.getMin(), gb.getMax());
         JSONObject obj = JSONUtil.createObj();
-        if(now>=1){
-            obj.set("statu","ok");
-        }else{
-            obj.set("statu","no");
+        if (now >= 1) {
+            obj.set("statu", "ok");
+        } else {
+            obj.set("statu", "no");
         }
         return obj;
     }
 
     @ApiOperation(value = "删除物联网设备")
     @PostMapping("/delgbs")
-    public JSON delGBBars(@RequestBody GBBars gb){
+    public JSON delGBBars(@RequestBody GBBars gb) {
         int now = gbBarsMapper.deleteGbBars(gb.getId());
+        int now2 = gbareaMapper.delArea(gb.getAddress());
         JSONObject obj = JSONUtil.createObj();
-        if(now>=1){
-            obj.set("statu","ok");
-        }else{
-            obj.set("statu","no");
+        if (now >= 1 && now2 > 1) {
+            obj.set("statu", "ok");
+        } else {
+            obj.set("statu", "no");
         }
         return obj;
     }

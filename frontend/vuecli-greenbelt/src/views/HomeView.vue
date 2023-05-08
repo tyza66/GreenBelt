@@ -128,8 +128,8 @@
                 <span class="s2">{{ one.name }}</span>
                 <span class="s3">{{ one.address }}</span>
                 <span class="s4">{{ one.min + " " + one.max }}</span>
-                <span class="s7"><el-button type="primary">修改阈值</el-button><el-button
-                    type="danger">删除设备</el-button></span>
+                <span class="s7"><el-button type="primary">修改阈值</el-button><el-button type="danger"
+                    @click="opdel()">删除设备</el-button></span>
               </div>
             </div>
           </el-tab-pane>
@@ -842,7 +842,7 @@ export default {
               .then(function (response) {
                 //console.log(a)
                 that.drivers[a].min = response[0].min,
-                that.drivers[a].max = response[0].max
+                  that.drivers[a].max = response[0].max
               })
               .catch(function (error) {
                 console.log(error);
@@ -852,21 +852,153 @@ export default {
                 })
               });
           });
-      });
-    }, 2000)
-    setInterval(function () {
-      request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
-        .then(function (response) {
-          if (response.code == '200') {
-            that.weather = response.daily[0]
-            var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
-            that.option1.series[0].data.shift()
-            //console.log(that.option1.series[0].data)
-            that.option1.series[0].data.push(a)
-            //console.log(that.option1.series[0].data)
-          } else {
+        });
+      }, 2000)
+      setInterval(function () {
+        request.get('https://devapi.qweather.com/v7/weather/3d?location=101010100&key=f712757ea9b64a739935f4c19283ab42')
+          .then(function (response) {
+            if (response.code == '200') {
+              that.weather = response.daily[0]
+              var a = (parseInt(that.weather.tempMin) + parseInt(that.weather.tempMax)) / 2
+              that.option1.series[0].data.shift()
+              //console.log(that.option1.series[0].data)
+              that.option1.series[0].data.push(a)
+              //console.log(that.option1.series[0].data)
+            } else {
+              ElMessage({
+                message: '天气信息获取失败!',
+                type: 'warning',
+              })
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
             ElMessage({
               message: '天气信息获取失败!',
+              type: 'warning',
+            })
+          });
+        that.option1 && that.myChart1.setOption(that.option1);
+      }, 600000)
+    }, 1)
+  },
+  methods: {
+    addcookie(name, value, time) {
+      var strSec = this.getSec(time);
+      var exp = new Date();
+      exp.setTime(exp.getTime() + strSec * 1);
+      //设置cookie的名称、值、失效时间
+      document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
+    },
+    getCookie(name) {
+      //获取当前所有cookie
+      var strCookies = document.cookie;
+      //截取变成cookie数组
+      var array = strCookies.split(';');
+      //循环每个cookie
+      for (var i = 0; i < array.length; i++) {
+        //将cookie截取成两部分
+        var item = array[i].split("=");
+        //判断cookie的name 是否相等
+        if (item[0] == name) {
+          return item[1];
+        }
+      }
+      return null;
+    },
+    delCookie(name) {
+      var exp = new Date();
+      exp.setTime(exp.getTime() - 1);
+      //获取cookie是否存在
+      var value = this.getCookie(name);
+      if (value != null) {
+        document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
+      }
+    },
+    getSec(str) {
+      var str1 = str.substr(0, str.length - 1);  //时间数值 
+      var str2 = str.substr(str.length - 1, 1);    //时间单位
+      if (str2 == "s") {
+        return str1 * 1000;
+      }
+      else if (str2 == "m") {
+        return str1 * 60 * 1000;
+      }
+      else if (str2 == "h") {
+        return str1 * 60 * 60 * 1000;
+      }
+      else if (str2 == "d") {
+        return str1 * 24 * 60 * 60 * 1000;
+      }
+    }, chooseDrive(id) {
+      this.nowGbName = this.drivers[id].name
+      this.nowGbAddress = this.drivers[id].address
+    },
+    handleClose(done) {
+      ElMessageBox.confirm('确定要关闭窗口吗?您填写的信息将会丢失!')
+        .then(() => {
+          done()
+        })
+        .catch(() => {
+          // catch error
+        })
+    },
+    addOne() {
+      this.input_name = ""
+      this.input_address = ""
+      this.input_min = ""
+      this.input_max = ""
+      this.ADDdialogVisible = true;
+    },
+    updateOD() {
+      var that = this
+      request.post('http://192.168.100.103:8888/gb/addgbs', {
+        address: that.input_address,
+        name: that.input_name
+      })
+        .then(function (response) {
+          //console.log(response);
+          if (response.statu == 'ok') {
+            request.post('http://192.168.100.103:8888/gb/addgbareas', {
+              address: that.input_address,
+              min: that.input_min,
+              max: that.input_max
+            })
+              .then(function (response) {
+                //console.log(response);
+                if (response.statu == 'ok') {
+                  ElMessage({
+                    message: '添加成功!',
+                    type: 'success',
+                  })
+                  request.get('http://192.168.100.103:8888/gb/getgbs')
+                    .then(function (response) {
+                      that.drivers = response
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      ElMessage({
+                        message: '设备列表获取失败!',
+                        type: 'warning',
+                      })
+                    });
+                } if (response.statu == 'no') {
+                  ElMessage({
+                    message: '您输入的信息有误，添加失败!',
+                    type: 'warning',
+                  })
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+                ElMessage({
+                  message: '添加出水区间失败!',
+                  type: 'warning',
+                })
+              });
+          } if (response.statu == 'no') {
+            ElMessage({
+              message: '您输入的信息有误，添加失败!',
               type: 'warning',
             })
           }
@@ -874,117 +1006,36 @@ export default {
         .catch(function (error) {
           console.log(error);
           ElMessage({
-            message: '天气信息获取失败!',
+            message: '添加设备失败!',
             type: 'warning',
           })
         });
-      that.option1 && that.myChart1.setOption(that.option1);
-    }, 600000)
-  }, 1)
-},
-methods: {
-  addcookie(name, value, time) {
-    var strSec = this.getSec(time);
-    var exp = new Date();
-    exp.setTime(exp.getTime() + strSec * 1);
-    //设置cookie的名称、值、失效时间
-    document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
-  },
-  getCookie(name) {
-    //获取当前所有cookie
-    var strCookies = document.cookie;
-    //截取变成cookie数组
-    var array = strCookies.split(';');
-    //循环每个cookie
-    for (var i = 0; i < array.length; i++) {
-      //将cookie截取成两部分
-      var item = array[i].split("=");
-      //判断cookie的name 是否相等
-      if (item[0] == name) {
-        return item[1];
-      }
-    }
-    return null;
-  },
-  delCookie(name) {
-    var exp = new Date();
-    exp.setTime(exp.getTime() - 1);
-    //获取cookie是否存在
-    var value = this.getCookie(name);
-    if (value != null) {
-      document.cookie = name + "=" + value + ";expires=" + exp.toUTCString();
-    }
-  },
-  getSec(str) {
-    var str1 = str.substr(0, str.length - 1);  //时间数值 
-    var str2 = str.substr(str.length - 1, 1);    //时间单位
-    if (str2 == "s") {
-      return str1 * 1000;
-    }
-    else if (str2 == "m") {
-      return str1 * 60 * 1000;
-    }
-    else if (str2 == "h") {
-      return str1 * 60 * 60 * 1000;
-    }
-    else if (str2 == "d") {
-      return str1 * 24 * 60 * 60 * 1000;
-    }
-  }, chooseDrive(id) {
-    this.nowGbName = this.drivers[id].name
-    this.nowGbAddress = this.drivers[id].address
-  },
-  handleClose(done) {
-    ElMessageBox.confirm('确定要关闭窗口吗?您填写的信息将会丢失!')
-      .then(() => {
-        done()
-      })
-      .catch(() => {
-        // catch error
-      })
-  },
-  addOne() {
-    this.input_name = ""
-    this.input_address = ""
-    this.input_min = ""
-    this.input_max = ""
-    this.ADDdialogVisible = true;
-  },
-  updateOD() {
-    var that = this
-    request.post('http://192.168.100.103:8888/gb/addgbs', {
-      address: that.input_address,
-      name: that.input_name
-    })
-      .then(function (response) {
-        //console.log(response);
-        if (response.statu == 'ok') {
-          request.post('http://192.168.100.103:8888/gb/addgbareas', {
-            address: that.input_address,
-            min: that.input_min,
-            max: that.input_max
+      this.ADDdialogVisible = false
+    }, opdel(id, add) {
+      ElMessageBox.confirm(
+        '您是否确定要删除此设备?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+        .then(() => {
+          request.post('http://192.168.100.103:8888/gb/delgbs', {
+            id: id,
+            address: add
           })
             .then(function (response) {
-              //console.log(response);
-              if (response.statu == 'ok') {
+              if (response.statu == "ok") {
                 ElMessage({
-                  message: '添加成功!',
-                  type: 'success',
+                  message: '删除设备成功!',
+                  type: 'warning',
                 })
-                request.get('http://192.168.100.103:8888/gb/getgbs')
-                  .then(function (response) {
-                    that.drivers = response
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                    ElMessage({
-                      message: '设备列表获取失败!',
-                      type: 'warning',
-                    })
-                  });
-              } if (response.statu == 'no') {
+              }
+              if (response.statu == "no") {
                 ElMessage({
-                  message: '您输入的信息有误，添加失败!',
+                  message: '删除设备失败!',
                   type: 'warning',
                 })
               }
@@ -992,26 +1043,18 @@ methods: {
             .catch(function (error) {
               console.log(error);
               ElMessage({
-                message: '添加出水区间失败!',
+                message: '删除设备错误!',
                 type: 'warning',
               })
             });
-        } if (response.statu == 'no') {
-          ElMessage({
-            message: '您输入的信息有误，添加失败!',
-            type: 'warning',
-          })
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        ElMessage({
-          message: '添加设备失败!',
-          type: 'warning',
         })
-      });
-    this.ADDdialogVisible = false
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '取消删除',
+          })
+        })
+    }
   }
-}
 }
 </script>
