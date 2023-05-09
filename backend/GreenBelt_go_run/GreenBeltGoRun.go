@@ -72,7 +72,7 @@ func main() {
 	rows, _ := engine.Rows(&GBBars{Group: 1})
 	rows2, _ := engine.Rows(&GBArea{})
 	//定义设备队列
-	drivers := GBQueue{buff: make([]string, counts), maxsize: int(counts), front: -1, rear: -1}
+	drivers := GBQueue{buff: make([]string, counts), maxsize: int(counts)+10, front: -1, rear: -1}
 	areaMax := map[string]string{}
 	areaMin := map[string]string{}
 	userBean := new(GBBars)
