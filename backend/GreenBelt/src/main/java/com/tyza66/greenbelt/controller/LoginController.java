@@ -85,7 +85,7 @@ public class LoginController {
 
     //提供随机种子
     public String getNumbers(int size) {
-        String str = "df5d6daas2ekfofsaffp66sgfsgfsd8a6fhoi635g4s56g4sgfgd65ggsg5464f4ewgs22d65g";
+        String str = "df5d6daas2ekfofsaffp66sgfsgfsd8a6fhotyza66i635g4s56g4sgfgd65ggsg5464f4ewgs22d65g";
         String number = "";
         Random r = new Random();
         for (int i = 0; i < size; i++) {
