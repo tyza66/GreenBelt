@@ -9,7 +9,7 @@ const routes = [
     component: LogView
   },
   {
-    path: '/about', 
+    path: '/about',
     name: 'about',
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }, {
