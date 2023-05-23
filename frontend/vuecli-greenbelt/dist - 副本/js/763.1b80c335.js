@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkvuecli_greenbelt"]=self["webpackChunkvuecli_greenbelt"]||[]).push([[763],{1763:function(e,n,t){t.r(n),t.d(n,{default:function(){return f}});var u=t(3396);const l={class:"about"},r=(0,u._)("h1",null,"Green Belt",-1),c=(0,u._)("h1",null,"基于大数据和物联网的可视化城市绿化带自动灌溉系统",-1),s=(0,u._)("h1",null,"开源地址：https://github.com/tyza66/GreenBelt",-1),a=[r,c,s];function i(e,n){return(0,u.wg)(),(0,u.iD)("div",l,a)}var h=t(89);const o={},b=(0,h.Z)(o,[["render",i]]);var f=b}}]);
-//# sourceMappingURL=763.1b80c335.js.map
