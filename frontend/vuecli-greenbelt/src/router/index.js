@@ -9,19 +9,19 @@ const routes = [
     component: LogView
   },
   {
-    path: '/about',
+    path: 'dist - 副本/about',
     name: 'about',
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }, {
-    path: '/help',
+    path: 'dist - 副本/help',
     name: 'help',
     component: () => import('../views/HelpView.vue')
   }, {
-    path: '/home',
+    path: 'dist - 副本/home',
     name: 'home',
     component: HomeView
   }, {
-    path: '/sign',
+    path: 'dist - 副本/sign',
     name: 'sign',
     component: () => import('../views/SignView.vue')
   }
