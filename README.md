@@ -36,6 +36,7 @@
    <img src="./文档/图片/小程序管理.jpg" width="300px" alt="小程序管理界面"/>
    </figure>
    </center>
+
 4. #### 物联网设备面包板单机图
 
     <img src="./文档/图片/面包板.jpg" width="250px" alt="面包板"/>
@@ -69,6 +70,8 @@
    说明：我们采用前后端分离的思想，并尽力消除[跨域时出现的问题](#其他说明)。本项目响应式网页和App使用两次不同的模式进行开发(Vue，Uniapp)，其一致力于网页上端可视化的体验，另一致力于App和小程序的体验（注意：APP端和小程序端的水泵开关优先级低于网页端设置的自动阈值）
 
    项目中对应文件夹：frontend
+
+   在线预览：[vuecli-greenbelt (tyza66.github.io)](https://tyza66.github.io/GreenBelt/frontend/vuecli-greenbelt/dist%20-%20%E5%89%AF%E6%9C%AC/#/)
 
 7. #### 硬件部分
 
