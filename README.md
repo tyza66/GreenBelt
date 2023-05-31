@@ -57,7 +57,7 @@
 
    环境：Node，Vue3.0，Vue2.0，HBuilderX，VS code，@vue/cli，微信开发者工具
 
-   Node前端应用技术：@vue/cliV，ue2.0，Elementui-Plus，Vuex，Vrouter，Axios，Echarts，uiverse.io，iconfont.cn，和风天气
+   Node前端应用技术：@vue/cliV，Vue2.0，Elementui-Plus，Vuex，Vrouter，Axios，Echarts，uiverse.io，iconfont.cn，和风天气
 
    网页部分说明：ElementuiPlus框架自带的响应式布局，支持设备热插拔显示实时情况
 
@@ -71,7 +71,7 @@
 
    项目中对应文件夹：frontend
 
-   web端在线预览：[Page not found · GitHub Pages (tyza66.github.io)](https://tyza66.github.io/GreenBelt/frontend/vuecli-greenbelt/review)
+   web端在线预览：[预览](https://tyza66.github.io/GreenBelt/frontend/vuecli-greenbelt/review)
 
 7. #### 硬件部分
 
