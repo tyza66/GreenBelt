@@ -208,6 +208,8 @@
     连接WiFi或拓展联网模块
     连接电源上线
     ```
+13. #### V计划
+- V计划：https://github.com/tyza66/ProjectV
 
 Thank You ! 🙏
 
